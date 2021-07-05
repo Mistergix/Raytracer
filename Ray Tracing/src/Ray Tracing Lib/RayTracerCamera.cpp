@@ -16,7 +16,7 @@ PerspectiveCamera::PerspectiveCamera(Vector3 origin, Vector3 target, Vector3 up2
     std::cout << "Width and height " << width << " " << height << std::endl;
 }
 
-Ray PerspectiveCamera::MakeRay(Vector3 point) const {
+Ray PerspectiveCamera::CreateRay(Vector3 point) const {
     Vector3 x = (point.x * width) * right;
     Vector3 y = (point.y * up) * height;
     Vector3 direction = forward + x;

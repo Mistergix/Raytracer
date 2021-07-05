@@ -184,7 +184,7 @@ int main(void)
                     //std::cout << x << " " << y << "  ";
                     //screenCoord.Print();
 
-                    Ray ray = (&camera)->MakeRay(screenCoord);
+                    Ray ray = (&camera)->CreateRay(screenCoord);
 
                     Color color;
                     RayHit rayHit(ray);

@@ -3,13 +3,13 @@
 
 class RayTracerCamera {
     public:
-        virtual Ray MakeRay(Vector3 point) const = 0;
+        virtual Ray CreateRay(Vector3 point) const = 0;
 };
 
 class PerspectiveCamera : public RayTracerCamera {
 public:
     PerspectiveCamera(Vector3 origin, Vector3 target, Vector3 up, float fov, float ratio);
-    virtual Ray MakeRay(Vector3 point) const;
+    virtual Ray CreateRay(Vector3 point) const;
     void SetPosition(Vector3 origin);
 protected:
     Vector3 origin;
