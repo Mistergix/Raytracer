@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "../Maths.h"
 
 struct Vector3 {
@@ -9,6 +10,8 @@ struct Vector3 {
     Vector3();
     Vector3(float a, float b, float c);
     Vector3(const Vector3& other);
+
+    void Print();
     
     inline float magnitude();
     inline float magnitudeSquared();
@@ -37,7 +40,7 @@ inline float square(float n)
 }
 
 inline Vector3 operator + (const Vector3& a, const Vector3& b){
-    return Vector3(a.x + b.x, a.y + b.y, a.z + b.x);
+    return Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
 inline Vector3 operator - (const Vector3& a, const Vector3& b){
@@ -61,7 +64,7 @@ inline Vector3 operator / (const Vector3& a, const Vector3& b){
 }
 
 inline Vector3 operator / (const Vector3& a, float f) {
-    return a * 1 / f;
+    return a * (1 / f);
 }
 
 inline Vector3 operator / (float f, const Vector3& a){

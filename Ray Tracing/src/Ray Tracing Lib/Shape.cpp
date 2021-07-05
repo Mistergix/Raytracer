@@ -11,7 +11,7 @@ bool Shape::Intersect(RayHit& rayHit) {
 
     float distance = intersection.distance;
 
-    if(distance <= RAY_DISTANCE_MIN || distance >= rayHit.ray.distanceMax){
+    if(distance <= RAY_DISTANCE_MIN || distance >= rayHit.distance){
         return false;
     }
 

@@ -29,3 +29,8 @@ Intersection Sphere::DoesIntersect(const Ray& ray){
     
     return Intersection(false, 0.0f);
 }
+
+void Sphere::SetCenter(const Vector3& c)
+{
+    center = c;
+}

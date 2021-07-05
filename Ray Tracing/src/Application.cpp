@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include "Renderer.h"
 #include "VertexBufferLayout.h"
@@ -9,8 +10,14 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 #include "Transform.h"
-#include "Camera.h"
 #include "Application.h"
+
+#include "Ray Tracing Lib/Scene.h"
+#include "Ray Tracing Lib/Shapes/Sphere.h"
+#include "Ray Tracing Lib/Shapes/Plane.h"
+#include "Ray Tracing Lib/RayTracerCamera.h"
+
+using namespace std::chrono;
 
 void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
 {
@@ -135,9 +142,23 @@ int main(void)
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
 
-        Transform camTransform, objectTransform;
-        //Camera cam;
-        camTransform.SetPos(0.0f, 0.0f, -10.0f);
+        Vector3 camPos(0.0f, 0.0f, -3.0f);
+        PerspectiveCamera camera(camPos,
+            Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), 50.0f * PI / 180.0f,
+            (float)SCR_WIDTH / (float)SCR_HEIGHT);
+
+        Scene scene;
+
+        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), Color(128, 255, 128));
+        Vector3 spherePos(-1.0f, 0.0f, 0.0f);
+        Sphere sphere(spherePos, 1.0f, Color(128, 128, 255));
+        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Color(0, 128, 255));
+
+        scene.AddShape(&floor);
+        scene.AddShape(&sphere);
+        scene.AddShape(&sphere2);
+
+        bool my_tool_active = true;
 
 
         /* Loop until the user closes the window */
@@ -148,7 +169,7 @@ int main(void)
 
             renderer.Clear();
 
-            CleanScreen(image, renderTexture);
+            //CleanScreen(image, renderTexture);
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
@@ -156,18 +177,45 @@ int main(void)
 
             shader.Bind();
 
+            for (int x = 0; x < image.GetWidth(); x++) {
+                for (int y = 0; y < image.GetHeight(); y++) {
+                    Vector3 screenCoord((2.0f * x) / image.GetWidth() - 1.0f, (-2.0f * y) / image.GetHeight() + 1.0f, 0.0f);
 
-            // WORK ON TEXTURE HERE
+                    //std::cout << x << " " << y << "  ";
+                    //screenCoord.Print();
+
+                    Ray ray = (&camera)->MakeRay(screenCoord);
+
+                    Color color;
+                    RayHit rayHit(ray);
+
+                    if ((&scene)->Intersect(rayHit)) {
+                        color = rayHit.color;
+                    }
+                    else
+                    {
+                        color = Color();
+                    }
+
+                    image.DrawPixel(x, y, color, renderTexture);
+                }
+            }
 
             GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, renderTexture));
             shader.SetUniform1i("u_Texture", slot);
             renderer.Draw(va, ib, shader);
 
             //IMGUI HERE
-
+            ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
+            ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -1.0f, 1.0f);
+            ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
+            ImGui::End();
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            sphere.SetCenter(spherePos);
+            camera.SetPosition(camPos);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

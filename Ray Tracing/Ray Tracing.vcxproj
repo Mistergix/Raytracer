@@ -157,7 +157,7 @@
     <ClCompile Include="src\Ray Tracing Lib\Shape.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Plane.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Sphere.cpp" />
-    <ClCompile Include="src\Ray Tracing Lib\Vector.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\Vector3.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Texture.cpp" />

@@ -6,6 +6,11 @@ Vector3::Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
 
 Vector3::Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z) {}
 
+void Vector3::Print()
+{
+	std::cout << x << " " << y << " " << z << std::endl;
+}
+
 Vector3 Vector3::Up() {return Vector3(0.0f, 1.0f, 0.0f);}
 Vector3 Vector3::Right() {return Vector3(1.0f, 0.0f, 0.0f);}
 Vector3 Vector3::Forward() {return Vector3(0.0f, 0.0f, 1.0f);}

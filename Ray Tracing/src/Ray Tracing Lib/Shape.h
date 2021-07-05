@@ -1,3 +1,4 @@
+#pragma once
 #include "Ray.h"
 #include "RayHit.h"
 #include "Vector3.h"
