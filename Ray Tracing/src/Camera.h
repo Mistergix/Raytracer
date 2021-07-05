@@ -1,5 +1,5 @@
 #pragma once
-#include "Maths/Maths.h"
+#include "../Maths.h"
 class Camera {
 public:
 	float* GetPerspectiveMatrix(float fovInDegrees, float near, float far, float aspectRatio);
