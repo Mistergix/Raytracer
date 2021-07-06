@@ -25,3 +25,13 @@ bool Shape::Intersect(RayHit& rayHit) {
 void Shape::SetColor(const Color& c){
     color = c;
 }
+
+void Shape::SetMaterial(const Material& mat)
+{
+    material = mat;
+}
+
+Material Shape::GetMaterial(const Vector3& p) const
+{
+    return material;
+}

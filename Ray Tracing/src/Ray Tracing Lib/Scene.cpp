@@ -5,6 +5,11 @@ Scene::~Scene() { }
 
 void Scene::AddShape(Shape* shape){ shapes.push_back(shape); }
 
+void Scene::AddLight(Light* light)
+{
+    lights.push_back(light);
+}
+
 bool Scene::Intersect(RayHit& rayHit){
     bool doesIntersect = false;
     for(auto iterator = shapes.begin(); iterator != shapes.end(); ++iterator){
@@ -13,4 +18,24 @@ bool Scene::Intersect(RayHit& rayHit){
     }
 
     return doesIntersect;
+}
+
+Color Scene::GetAmbiant() const
+{
+    return ambiant;
+}
+
+void Scene::SetAmbiant(const Color& c)
+{
+    ambiant = c;
+}
+
+int Scene::NbLights() const
+{
+    return lights.size();
+}
+
+const Light* Scene::GetLight(int index) const
+{
+    return lights[index];
 }

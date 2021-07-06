@@ -190,6 +190,7 @@ int main(void)
                     RayHit rayHit(ray);
 
                     if ((&scene)->Intersect(rayHit)) {
+                        color = rayHit.GetImpactColor(scene);
                         color = rayHit.color;
                     }
                     else
