@@ -1,5 +1,9 @@
 #include "Light.h"
 
+Light::Light() : position(Vector3()), id(Color(255,255,255)), is(Color(255,255,255))
+{
+}
+
 Light::Light(const Vector3& pos, const Color& id, const Color& is) : position(pos), id(id), is(is)
 {
 }

@@ -1,13 +1,12 @@
 ﻿{
-  "background" : [128, 128, 128],
-  "ambiant" : [255, 255, 255],
+  "ambiant" : [255, 0, 0],
   "lights": [
     {
       "type": "point",
       "position": [
-        0,
-        10,
-        0
+        1,
+        3,
+        -1
       ],
       "id": [
         255,
@@ -15,9 +14,9 @@
         255
       ],
       "is": [
-        128,
         255,
-        128
+        255,
+        255
       ]
     }
   ],
@@ -34,11 +33,13 @@
         1,
         0
       ],
-      "color": [
-        128,
-        255,
-        128
-      ]
+	  "material" : {
+		 "type" : "phong",
+		 "shininess" : 10,
+		 "ambiant" : [255, 255, 255],
+		 "specular" : [255, 255, 255],
+		 "diffuse" : [255, 0, 0]
+	  }
     },
     {
       "type": "sphere",
@@ -48,11 +49,13 @@
         0
       ],
       "radius": 1,
-      "color": [
-        128,
-        128,
-        255
-      ]
+      "material" : {
+		 "type" : "phong",
+		 "shininess" : 10,
+		 "ambiant" : [25, 25, 25],
+		 "specular" : [255, 255, 255],
+		 "diffuse" : [0, 255, 0]
+	  }
     }
   ],
   "camera": {
@@ -64,7 +67,7 @@
     ],
     "position": [
       0,
-      0,
+      1,
       -3
     ]
   }

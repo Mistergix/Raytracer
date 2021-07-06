@@ -21,6 +21,8 @@
 #include "Ray Tracing Lib/Background.h"
 #include "Ray Tracing Lib/JsonReader.h"
 
+#include <typeinfo>
+
 
 
 void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
@@ -149,37 +151,63 @@ int main(void)
         JsonReader reader;
         json sceneJson = reader.GetJsonFile("res/scenes/scene1.json");
 
-        Vector3 camPos(0.0f, 1.0f, -3.0f);
+        auto jCamera = sceneJson.at("camera");
+        auto jAmbiant = sceneJson.at("ambiant");
+
+        Vector3 camPos(jCamera.at("position").at(0), jCamera.at("position").at(1), jCamera.at("position").at(2));
+        Vector3 camLookAt(jCamera.at("lookAt").at(0), jCamera.at("lookAt").at(1), jCamera.at("lookAt").at(2));
         PerspectiveCamera camera(camPos,
-            Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), 50.0f * PI / 180.0f,
+            camLookAt, Vector3::Up(), jCamera.at("fov") * PI / 180.0f,
             (float)SCR_WIDTH / (float)SCR_HEIGHT);
 
         Scene scene;
         bool useShadow = true;
         scene.shadowFactor = 0.5f;
-        scene.SetBackground(Color(0, 0, 0));
-        scene.SetAmbiant(Color(255, 0, 0));
+        scene.SetAmbiant(Color(jAmbiant.at(0), jAmbiant.at(1), jAmbiant.at(2)));
+
+        //TODO utiliser des new et désallouer à la fin du programme
+
+        auto jLights = sceneJson.at("lights");
+        for (int i = 0; i < jLights.size(); i++)
+        {
+            auto light = jLights.at(i);
+            if (light.at("type").get<std::string>().compare("point") == 0) {
+                Color lightSpec = Color(light.at("is").at(0), light.at("is").at(1), light.at("is").at(2));
+                Color lightColor = Color(light.at("id").at(0), light.at("id").at(1), light.at("id").at(2));
+
+                Vector3 lightPos(light.at("position").at(0), light.at("position").at(1), light.at("position").at(2));
+                Light light(lightPos, lightColor, lightSpec);
+                scene.AddLight(&light);
+            }
+        }
+        /*
+        auto jShapes = sceneJson.at("shapes");
+        for (int i = 0; i < jShapes.size(); i++)
+        {
+            auto shape = jShapes.at(i);
+            Color dColor = Color(shape.at("material").at("diffuse").at(0), shape.at("material").at("diffuse").at(1), shape.at("material").at("diffuse").at(2));
+            Color sColor = Color(shape.at("material").at("specular").at(0), shape.at("material").at("specular").at(1), shape.at("material").at("specular").at(2));
+            Color aColor = Color(shape.at("material").at("ambiant").at(0), shape.at("material").at("ambiant").at(1), shape.at("material").at("ambiant").at(2));
+            Material mat = Material(dColor, sColor, aColor, shape.at("material").at("shininess"));
+            if (shape.at("type").get<std::string>().compare("plane") == 0) {
+                Vector3 pos(shape.at("position").at(0), shape.at("position").at(1), shape.at("position").at(2));
+                Vector3 normal(shape.at("normal").at(0), shape.at("normal").at(1), shape.at("normal").at(2));
+                Plane plane = new Plane(pos, normal, mat);
+                scene.AddShape(&plane);
+            }
+        }*/
 
         float shininess = 10;
         Color matAmbiant = Color(25, 25, 25);
         Color matSpec = Color(255, 255, 255);
 
-        float lightIntensity = 1;
+        Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
 
-        Color lightSpec = Color(255, 255, 255) * lightIntensity;
-        Color lightColor = Color(255, 255, 255);
-
-        Vector3 lightPos(1.0f, 3.0f, -1.0f);
-        Light light(lightPos, lightColor, lightSpec);
-        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Material(Color(255, 0,0), matSpec, Color(255,255,255), shininess));
         Vector3 spherePos(0.0f, 1.0f, 0.0f);
         Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), matSpec, matAmbiant, shininess));
-        //Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
-        //scene.AddShape(&sphere2);
-        scene.AddLight(&light);
 
         Background background;
 
@@ -246,7 +274,7 @@ int main(void)
             ImGui::SliderInt("AA Samples", &samples, 1, 2);
             ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
-            ImGui::SliderFloat3("Light Pos", &light.position.x, -10.0f, 10.0f);
+            ImGui::SliderFloat("Shadow Factor", &scene.shadowFactor, 0.0f, 1.0f);
             if (ImGui::BeginMenuBar())
             {
                 if (ImGui::BeginMenu("Show"))

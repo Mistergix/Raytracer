@@ -4,13 +4,7 @@
 
 json JsonReader::GetJsonFile(const std::string& filepath)
 {
-	std::ifstream stream(filepath);
-
-    std::string line;
-    std::stringstream ss;
-    while (getline(stream, line)) {
-        ss << line << "\n";
-    }
-
-    return ss.str();
+    std::ifstream stream(filepath);
+    json j  = json::parse(stream);
+    return j;
 }
