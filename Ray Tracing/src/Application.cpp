@@ -169,16 +169,16 @@ int main(void)
         Color lightSpec = Color(255, 255, 255) * lightIntensity;
         Color lightColor = Color(255, 255, 255);
 
-        Vector3 lightPos(1.0f, 3.0f, 0.0f);
+        Vector3 lightPos(1.0f, 3.0f, -1.0f);
         Light light(lightPos, lightColor, lightSpec);
         Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Material(Color(255, 0,0), matSpec, Color(255,255,255), shininess));
-        Vector3 spherePos(-1.0f, 0.0f, 0.0f);
+        Vector3 spherePos(0.0f, 1.0f, 0.0f);
         Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), matSpec, matAmbiant, shininess));
-        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
+        //Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
-        scene.AddShape(&sphere2);
+        //scene.AddShape(&sphere2);
         scene.AddLight(&light);
 
         Background background;

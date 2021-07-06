@@ -61,13 +61,13 @@ Color RayHit::GetShadowFeeler(const Scene& scene)
 	for (int l = 0; l < scene.NbLights(); l++) {
 		const Light* light = scene.GetLight(l);
 		Vector3 lv = light->GetVectorToLight(impact);
-		Ray toLight(impact, lv);
+		Ray toLight(impact + lv * 0.0001f, lv);
 
 		for (int s = 0; s < scene.NbShapes(); s++) {
 			Shape* sh = scene.GetShape(s);
 			if (shape->index == sh->index) { continue; }
 			if (sh->DoesIntersect(toLight).intersect) {
-				return color* scene.shadowFactor;
+				return color * scene.shadowFactor;
 			}
 
 		}
