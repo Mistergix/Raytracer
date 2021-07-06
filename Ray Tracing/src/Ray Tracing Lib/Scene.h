@@ -16,6 +16,9 @@ class Scene {
         void SetBackground(const Color& c);
         int NbLights() const;
         const Light* GetLight(int index) const;
+        int NbShapes() const;
+        Shape* GetShape(int index) const;
+        float shadowFactor;
     protected :
         Color ambiant;
         Color background;

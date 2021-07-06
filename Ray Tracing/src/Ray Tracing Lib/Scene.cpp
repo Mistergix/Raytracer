@@ -3,7 +3,10 @@
 Scene::Scene() { }
 Scene::~Scene() { }
 
-void Scene::AddShape(Shape* shape){ shapes.push_back(shape); }
+void Scene::AddShape(Shape* shape){ 
+    shape->index = NbShapes();
+    shapes.push_back(shape); 
+}
 
 void Scene::AddLight(Light* light)
 {
@@ -48,4 +51,14 @@ int Scene::NbLights() const
 const Light* Scene::GetLight(int index) const
 {
     return lights[index];
+}
+
+int Scene::NbShapes() const
+{
+    return shapes.size();
+}
+
+ Shape* Scene::GetShape(int index)  const
+{
+    return shapes[index];
 }

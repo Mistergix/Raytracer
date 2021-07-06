@@ -57,6 +57,22 @@ Color RayHit::GetImpactColor(const Scene& scene)
 
 Color RayHit::GetShadowFeeler(const Scene& scene)
 {
-	return Color();
+	Vector3 impact = HitPoint();
+	for (int l = 0; l < scene.NbLights(); l++) {
+		const Light* light = scene.GetLight(l);
+		Vector3 lv = light->GetVectorToLight(impact);
+		Ray toLight(impact, lv);
+
+		for (int s = 0; s < scene.NbShapes(); s++) {
+			Shape* sh = scene.GetShape(s);
+			if (shape->index == sh->index) { continue; }
+			if (sh->DoesIntersect(toLight).intersect) {
+				return color* scene.shadowFactor;
+			}
+
+		}
+	}
+
+	return color;
 }
 

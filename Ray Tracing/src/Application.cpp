@@ -49,7 +49,7 @@ int main(void)
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Ray Tracing", NULL, NULL);
+    window = glfwCreateWindow(1000, 1000, "Ray Tracing", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -155,7 +155,8 @@ int main(void)
             (float)SCR_WIDTH / (float)SCR_HEIGHT);
 
         Scene scene;
-        bool useShadow = false;
+        bool useShadow = true;
+        scene.shadowFactor = 0.5f;
         scene.SetBackground(Color(0, 0, 0));
         scene.SetAmbiant(Color(255, 0, 0));
 
@@ -233,6 +234,17 @@ int main(void)
             ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Light Pos", &light.position.x, -10.0f, 10.0f);
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("Show"))
+                {
+                    if (ImGui::MenuItem("Show Shadows", "")) {
+                        useShadow = !useShadow;
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
             ImGui::End();
 
             ImGui::Render();

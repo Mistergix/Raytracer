@@ -21,6 +21,7 @@ class Shape {
         void SetMaterial(const Material& mat);
         Material GetMaterial(const Vector3& p)const;
         virtual Ray GetNormal(const Vector3& p, const Vector3& o)const = 0;
+        int index;
     protected :
         Material material;
 };
