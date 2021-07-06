@@ -8,7 +8,7 @@ Shape::Shape()
 {
 }
 
-bool Shape::Intersect(RayHit& rayHit) {
+bool Shape::Intersect(const Scene& scene, RayHit& rayHit) {
 
     Intersection intersection = DoesIntersect(rayHit.ray);
 
@@ -22,13 +22,9 @@ bool Shape::Intersect(RayHit& rayHit) {
 
     rayHit.distance = distance;
     rayHit.shape = this;
-    rayHit.color = color;
+    rayHit.color = rayHit.GetImpactColor(scene);
 
     return true;
-}
-
-void Shape::SetColor(const Color& c){
-    color = c;
 }
 
 void Shape::SetMaterial(const Material& mat)

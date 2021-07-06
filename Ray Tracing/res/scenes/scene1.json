@@ -1,4 +1,6 @@
 ﻿{
+  "background" : [128, 128, 128],
+  "ambiant" : [255, 255, 255],
   "lights": [
     {
       "type": "point",

@@ -1,7 +1,7 @@
 #include "Sphere.h";
 
-Sphere::Sphere(const Vector3& center, float radius, const Color& color) : center(center), radius(radius) {
-    SetColor(color);
+Sphere::Sphere(const Vector3& center, float radius, const Material& mat) : center(center), radius(radius) {
+    SetMaterial(mat);
 }
 
 Sphere::~Sphere() { }

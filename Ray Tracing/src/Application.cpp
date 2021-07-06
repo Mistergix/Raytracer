@@ -154,18 +154,24 @@ int main(void)
             (float)SCR_WIDTH / (float)SCR_HEIGHT);
 
         Scene scene;
+        scene.SetBackground(Color(0, 0, 0));
+        scene.SetAmbiant(Color(255, 255, 255));
 
-        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), Color(128, 255, 128));
+        float shininess = 5000;
+
+        Vector3 lightPos(1.0f, 3.0f, 0.0f);
+        Light light(lightPos, Color(255, 255, 255), Color(10, 10, 10));
+        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), Material(Color(255, 0, 0), Color(10, 10, 10), Color(0, 0, 0), shininess));
         Vector3 spherePos(-1.0f, 0.0f, 0.0f);
-        Sphere sphere(spherePos, 1.0f, Color(128, 128, 255));
-        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Color(0, 128, 255));
+        Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), Color(10, 10, 10), Color(0, 0, 0), shininess));
+        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), Color(10, 10, 10), Color(0, 0, 0), shininess));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
         scene.AddShape(&sphere2);
+        scene.AddLight(&light);
 
         bool my_tool_active = true;
-
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
@@ -196,12 +202,11 @@ int main(void)
                     RayHit rayHit(ray);
 
                     if ((&scene)->Intersect(rayHit)) {
-                        //color = rayHit.GetImpactColor(scene);
                         color = rayHit.color;
                     }
                     else
                     {
-                        color = Color();
+                        color = scene.GetBackground();
                     }
 
                     image.DrawPixel(x, y, color, renderTexture);
@@ -216,6 +221,7 @@ int main(void)
             ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
             ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -1.0f, 1.0f);
             ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
+            ImGui::SliderFloat3("Light Pos", &light.position.x, -5.0f, 5.0f);
             ImGui::End();
 
             ImGui::Render();

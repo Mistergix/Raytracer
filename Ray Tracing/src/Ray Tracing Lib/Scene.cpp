@@ -14,7 +14,7 @@ bool Scene::Intersect(RayHit& rayHit){
     bool doesIntersect = false;
     for(auto iterator = shapes.begin(); iterator != shapes.end(); ++iterator){
         Shape *shape = *iterator;
-        if(shape-> Intersect(rayHit)){ doesIntersect = true; }
+        if(shape-> Intersect(*this, rayHit)){ doesIntersect = true; }
     }
 
     return doesIntersect;
@@ -28,6 +28,16 @@ Color Scene::GetAmbiant() const
 void Scene::SetAmbiant(const Color& c)
 {
     ambiant = c;
+}
+
+Color Scene::GetBackground() const
+{
+    return background;
+}
+
+void Scene::SetBackground(const Color& c)
+{
+    background = c;
 }
 
 int Scene::NbLights() const

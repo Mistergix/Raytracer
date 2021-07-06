@@ -1,5 +1,9 @@
 #include "Light.h"
 
+Light::Light(const Vector3& pos, const Color& id, const Color& is) : position(pos), id(id), is(is)
+{
+}
+
 Ray Light::GetRayToLight(const Vector3& p) const
 {
     Vector3 dir = GetVectorToLight(p);

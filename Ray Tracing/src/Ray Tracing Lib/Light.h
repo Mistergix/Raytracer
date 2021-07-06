@@ -4,6 +4,7 @@
 
 class Light {
 	public:
+	Light(const Vector3& pos, const Color& id, const Color& is);
 	Ray GetRayToLight(const Vector3& p)const;
 	Ray GetRayFromLight(const Vector3& p)const;
 	Vector3 GetVectorToLight(const Vector3& p)const;

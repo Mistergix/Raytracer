@@ -1,7 +1,7 @@
 #include "Plane.h"
 
-Plane::Plane(const Vector3& position, const Vector3& normal, const Color& color) : position(position), normal(normal) {
-    SetColor(color);
+Plane::Plane(const Vector3& position, const Vector3& normal, const Material& material) : position(position), normal(normal) {
+    SetMaterial(material);
 }
 Plane::~Plane () {}
 
