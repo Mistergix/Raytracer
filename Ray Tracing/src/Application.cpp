@@ -183,6 +183,8 @@ int main(void)
 
         Background background;
 
+        int samples = 1;
+
         bool my_tool_active = true;
 
         /* Loop until the user closes the window */
@@ -203,23 +205,33 @@ int main(void)
 
             for (int x = 0; x < image.GetWidth(); x++) {
                 for (int y = 0; y < image.GetHeight(); y++) {
-                    Vector3 screenCoord((2.0f * x) / image.GetWidth() - 1.0f, (-2.0f * y) / image.GetHeight() + 1.0f, 0.0f);
-
-                    //std::cout << x << " " << y << "  ";
-                    //screenCoord.Print();
-
-                    Ray ray = (&camera)->CreateRay(screenCoord);
-
+                    float r = 0.0f, g = 0.0f, b = 0.0f;
                     Color color;
-                    RayHit rayHit(ray);
-
-                    if ((&scene)->Intersect(rayHit, useShadow)) {
-                        color = rayHit.color;
-                    }
-                    else
+                    for (int i = 0; i < samples; i++)
                     {
-                        color = background.Get(rayHit.Direction());
+                        float newX = (float)x + float(i) / (float)samples + 0.25f;
+                        for (int j = 0; j < samples; j++)
+                        {
+                            float newY = (float)y + float(j) / (float)samples + 0.25f;
+                            Vector3 screenCoord((2.0f * newX) / image.GetWidth() - 1.0f, (-2.0f * newY) / image.GetHeight() + 1.0f, 0.0f);
+                            Ray ray = (&camera)->CreateRay(screenCoord);
+                            RayHit rayHit(ray);
+
+                            if ((&scene)->Intersect(rayHit, useShadow)) {
+                                color = rayHit.color;
+                            }
+                            else
+                            {
+                                color = background.Get(rayHit.Direction());
+                            }
+
+                            r += color.r;
+                            g += color.g;
+                            b += color.b;
+                        }
                     }
+
+                    color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
 
                     image.DrawPixel(x, y, color, renderTexture);
                 }
@@ -231,6 +243,7 @@ int main(void)
 
             //IMGUI HERE
             ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
+            ImGui::SliderInt("AA Samples", &samples, 1, 2);
             ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Light Pos", &light.position.x, -10.0f, 10.0f);
