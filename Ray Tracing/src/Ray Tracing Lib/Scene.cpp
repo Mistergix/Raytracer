@@ -10,11 +10,11 @@ void Scene::AddLight(Light* light)
     lights.push_back(light);
 }
 
-bool Scene::Intersect(RayHit& rayHit){
+bool Scene::Intersect(RayHit& rayHit, bool useShadow){
     bool doesIntersect = false;
     for(auto iterator = shapes.begin(); iterator != shapes.end(); ++iterator){
         Shape *shape = *iterator;
-        if(shape-> Intersect(*this, rayHit)){ doesIntersect = true; }
+        if(shape-> Intersect(*this, rayHit, useShadow)){ doesIntersect = true; }
     }
 
     return doesIntersect;

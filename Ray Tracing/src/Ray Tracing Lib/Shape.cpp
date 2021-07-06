@@ -8,7 +8,7 @@ Shape::Shape()
 {
 }
 
-bool Shape::Intersect(const Scene& scene, RayHit& rayHit) {
+bool Shape::Intersect(const Scene& scene, RayHit& rayHit, bool useShadows) {
 
     Intersection intersection = DoesIntersect(rayHit.ray);
 
@@ -23,6 +23,10 @@ bool Shape::Intersect(const Scene& scene, RayHit& rayHit) {
     rayHit.distance = distance;
     rayHit.shape = this;
     rayHit.color = rayHit.GetImpactColor(scene);
+
+    if (useShadows) {
+        rayHit.color = rayHit.GetShadowFeeler(scene);
+    }
 
     return true;
 }

@@ -37,21 +37,26 @@ Color RayHit::GetImpactColor(const Scene& scene)
 	Vector3 impact = HitPoint();
 	Material m = shape->GetMaterial(impact);
 	Ray normal = shape->GetNormal(impact, ray.origin);
-	Color c = m.ka * (scene.GetAmbiant());
+	Color c = m.ka * (scene.GetAmbiant()) * m.kd;
 	for (int l = 0; l < scene.NbLights(); l++) {
 		const Light* light = scene.GetLight(l);
 		Vector3 lv = light->GetVectorToLight(impact);
 		float alpha = dot(lv, normal.direction);
-		if (alpha > 0)
+		if (alpha > 0.0f)
 			c += (light->id) * (m.kd) * alpha;
 
-		Vector3 rm = (2 * dot(lv, normal.direction) * normal.direction) - lv;
+		Vector3 rm = (2.0f * dot(lv, normal.direction) * normal.direction) - lv;
 
 		float beta = dot(-rm, ray.direction);
-		if (beta > 0)
+		if (beta > 0.0f)
 			c += (light->is) * (m.ks) * pow(beta, m.shininess);
 	}
 
 	return c;
+}
+
+Color RayHit::GetShadowFeeler(const Scene& scene)
+{
+	return Color();
 }
 

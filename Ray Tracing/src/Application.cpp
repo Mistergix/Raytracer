@@ -18,8 +18,9 @@
 #include "Ray Tracing Lib/RayTracerCamera.h"
 #include "Ray Tracing Lib/Ray.h"
 #include "Ray Tracing Lib/RayHit.h"
-
+#include "Ray Tracing Lib/Background.h"
 #include "Ray Tracing Lib/JsonReader.h"
+
 
 
 void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
@@ -148,28 +149,38 @@ int main(void)
         JsonReader reader;
         json sceneJson = reader.GetJsonFile("res/scenes/scene1.json");
 
-        Vector3 camPos(0.0f, 0.0f, -3.0f);
+        Vector3 camPos(0.0f, 1.0f, -3.0f);
         PerspectiveCamera camera(camPos,
             Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), 50.0f * PI / 180.0f,
             (float)SCR_WIDTH / (float)SCR_HEIGHT);
 
         Scene scene;
+        bool useShadow = false;
         scene.SetBackground(Color(0, 0, 0));
-        scene.SetAmbiant(Color(255, 255, 255));
+        scene.SetAmbiant(Color(255, 0, 0));
 
-        float shininess = 5000;
+        float shininess = 10;
+        Color matAmbiant = Color(25, 25, 25);
+        Color matSpec = Color(255, 255, 255);
+
+        float lightIntensity = 1;
+
+        Color lightSpec = Color(255, 255, 255) * lightIntensity;
+        Color lightColor = Color(255, 255, 255);
 
         Vector3 lightPos(1.0f, 3.0f, 0.0f);
-        Light light(lightPos, Color(255, 255, 255), Color(10, 10, 10));
-        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), Material(Color(255, 0, 0), Color(10, 10, 10), Color(0, 0, 0), shininess));
+        Light light(lightPos, lightColor, lightSpec);
+        Plane floor(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Material(Color(255, 0,0), matSpec, Color(255,255,255), shininess));
         Vector3 spherePos(-1.0f, 0.0f, 0.0f);
-        Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), Color(10, 10, 10), Color(0, 0, 0), shininess));
-        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), Color(10, 10, 10), Color(0, 0, 0), shininess));
+        Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), matSpec, matAmbiant, shininess));
+        Sphere sphere2(spherePos - Vector3::Forward(), 0.5f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
         scene.AddShape(&sphere2);
         scene.AddLight(&light);
+
+        Background background;
 
         bool my_tool_active = true;
 
@@ -201,12 +212,12 @@ int main(void)
                     Color color;
                     RayHit rayHit(ray);
 
-                    if ((&scene)->Intersect(rayHit)) {
+                    if ((&scene)->Intersect(rayHit, useShadow)) {
                         color = rayHit.color;
                     }
                     else
                     {
-                        color = scene.GetBackground();
+                        color = background.Get(rayHit.Direction());
                     }
 
                     image.DrawPixel(x, y, color, renderTexture);
@@ -219,9 +230,9 @@ int main(void)
 
             //IMGUI HERE
             ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
-            ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -1.0f, 1.0f);
+            ImGui::SliderFloat3("Sphere Pos", &spherePos.x, -5.0f, 5.0f);
             ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
-            ImGui::SliderFloat3("Light Pos", &light.position.x, -5.0f, 5.0f);
+            ImGui::SliderFloat3("Light Pos", &light.position.x, -10.0f, 10.0f);
             ImGui::End();
 
             ImGui::Render();

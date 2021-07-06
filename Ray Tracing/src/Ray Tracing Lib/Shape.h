@@ -15,7 +15,7 @@ struct Intersection {
 class Shape {
     public:
         Shape();
-        bool Intersect(const Scene& scene, RayHit& rayHit);
+        bool Intersect(const Scene& scene, RayHit& rayHit, bool useShadow);
         virtual Intersection DoesIntersect(const Ray& ray) = 0;
         virtual ~Shape() {}
         void SetMaterial(const Material& mat);

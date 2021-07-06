@@ -1055,6 +1055,9 @@
     <ClInclude Include="src\Ray Tracing Lib\JsonReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Background.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">

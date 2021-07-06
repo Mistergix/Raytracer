@@ -9,7 +9,7 @@ class Scene {
         virtual ~Scene();
         void AddShape(Shape* shape);
         void AddLight(Light* light);
-        bool Intersect(RayHit& rayHit);
+        bool Intersect(RayHit& rayHit, bool useShadow);
         Color GetAmbiant() const;
         void SetAmbiant(const Color& c);
         Color GetBackground() const;

@@ -18,10 +18,10 @@ Ray Light::GetRayFromLight(const Vector3& p) const
 
 Vector3 Light::GetVectorToLight(const Vector3& p) const
 {
-    return (position - p);
+    return (position - p).normalized();
 }
 
 Vector3 Light::GetVectorFromLight(const Vector3& p) const
 {
-    return (p - position);
+    return (p - position).normalized();
 }
