@@ -1,7 +1,7 @@
 #pragma once
 #include "Ray.h"
-#include "color.h"
 #include "Scene.h"
+#include "Color.h"
 
 #define NULL 0
 
@@ -11,7 +11,7 @@ struct RayHit
 {
 	Ray ray;
 	float distance;
-	Shape *shape;
+	Shape* shape;
 	Color color;
 
 	RayHit();
@@ -22,7 +22,7 @@ struct RayHit
 	Vector3 HitPoint() const;
 	Vector3 Direction() const;
 	Vector3 Origin() const;
-	Color GetImpactColor(Scene& scene);
+	Color GetImpactColor(const Scene& scene);
 
 	RayHit& operator = (const RayHit& other);
 };

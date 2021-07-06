@@ -1,7 +1,12 @@
 #pragma once
 #include "Shape.h"
+#include "RayHit.h"
 
 Intersection::Intersection(bool intersect, float distance) : intersect(intersect), distance(distance) {}
+
+Shape::Shape()
+{
+}
 
 bool Shape::Intersect(RayHit& rayHit) {
 

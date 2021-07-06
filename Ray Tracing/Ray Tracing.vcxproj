@@ -148,6 +148,9 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\JsonReader.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\Light.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\Material.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\RayTracerCamera.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Color.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Image.cpp" />
@@ -178,6 +181,9 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Maths.h" />
+    <ClInclude Include="src\Ray Tracing Lib\JsonReader.h" />
+    <ClInclude Include="src\Ray Tracing Lib\Light.h" />
+    <ClInclude Include="src\Ray Tracing Lib\Material.h" />
     <ClInclude Include="src\Ray Tracing Lib\RayTracerCamera.h" />
     <ClInclude Include="src\Ray Tracing Lib\Color.h" />
     <ClInclude Include="src\Ray Tracing Lib\Image.h" />
@@ -482,12 +488,14 @@
     <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\vendor\json.hpp" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\scenes\scene1.json" />
     <None Include="src\res\shaders\Basic.shader" />
     <None Include="src\res\shaders\Phong.shader" />
     <None Include="src\res\shaders\Transform.shader" />

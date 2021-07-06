@@ -1,4 +1,4 @@
-#include "../Shape.h";
+#include "../Shape.h"
 
 class Sphere : public Shape {
     public:
@@ -6,6 +6,7 @@ class Sphere : public Shape {
         virtual ~Sphere();
         virtual Intersection DoesIntersect(const Ray& ray);
         void SetCenter(const Vector3& center);
+        virtual Ray GetNormal(const Vector3& p, const Vector3& o)const;
     protected :
         Vector3 center;
 	    float radius;

@@ -16,8 +16,11 @@
 #include "Ray Tracing Lib/Shapes/Sphere.h"
 #include "Ray Tracing Lib/Shapes/Plane.h"
 #include "Ray Tracing Lib/RayTracerCamera.h"
+#include "Ray Tracing Lib/Ray.h"
+#include "Ray Tracing Lib/RayHit.h"
 
-using namespace std::chrono;
+#include "Ray Tracing Lib/JsonReader.h"
+
 
 void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
 {
@@ -142,6 +145,9 @@ int main(void)
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
 
+        JsonReader reader;
+        json sceneJson = reader.GetJsonFile("res/scenes/scene1.json");
+
         Vector3 camPos(0.0f, 0.0f, -3.0f);
         PerspectiveCamera camera(camPos,
             Vector3(0.0f, 0.0f, 0.0f), Vector3::Up(), 50.0f * PI / 180.0f,
@@ -190,7 +196,7 @@ int main(void)
                     RayHit rayHit(ray);
 
                     if ((&scene)->Intersect(rayHit)) {
-                        color = rayHit.GetImpactColor(scene);
+                        //color = rayHit.GetImpactColor(scene);
                         color = rayHit.color;
                     }
                     else

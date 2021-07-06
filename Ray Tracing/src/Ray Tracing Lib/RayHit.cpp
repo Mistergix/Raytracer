@@ -32,7 +32,7 @@ Vector3 RayHit::Origin() const {
 	return ray.origin;
 }
 
-Color RayHit::GetImpactColor(Scene& scene)
+Color RayHit::GetImpactColor(const Scene& scene)
 {
 	Vector3 impact = HitPoint();
 	Material m = shape->GetMaterial(impact);

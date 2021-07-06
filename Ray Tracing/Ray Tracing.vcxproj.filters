@@ -96,6 +96,15 @@
     <ClCompile Include="src\Ray Tracing Lib\Vector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\JsonReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\glm\detail\_features.hpp">
@@ -1034,6 +1043,18 @@
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\JsonReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1447,6 +1468,7 @@
     <None Include="src\res\shaders\Basic.shader" />
     <None Include="src\res\shaders\Phong.shader" />
     <None Include="src\res\shaders\Transform.shader" />
+    <None Include="res\scenes\scene1.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\res\textures\Jhin_Render.png">

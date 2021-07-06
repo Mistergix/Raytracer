@@ -34,3 +34,8 @@ void Sphere::SetCenter(const Vector3& c)
 {
     center = c;
 }
+
+Ray Sphere::GetNormal(const Vector3& p, const Vector3& o) const
+{
+    return Ray(p, (p - center));
+}
