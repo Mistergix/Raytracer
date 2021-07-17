@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>	  			  				    	  
 class Matrix
 {
 private:
@@ -18,12 +19,14 @@ public:
     float& operator[](int val) const;
     float& operator()(int val1, int val2) const;
     // Accès à l'inverse de la Matrix
-    Matrix inverse();
+    Matrix inverse4x4();
     //TODO? Opérateurs de multiplications avec des Hpoints et HVectors
     //Accesseurs
     int getCols() const;
     int getRows() const;
+    void set(int i, float val);
     void set(int i, int j, float val);
-    int get(int i, int j) const;    
+    float get(int i, int j) const;    
 };
+std::ostream& operator<<(std::ostream& os, const Matrix& m);
 

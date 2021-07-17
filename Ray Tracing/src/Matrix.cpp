@@ -54,15 +54,165 @@ int Matrix::getCols() const {
 int Matrix::getRows() const {
     return m_rows;
 }
+void Matrix::set(int i, float val) {
+    m_tab[i] = val;
+}
 void Matrix::set(int i, int j, float val) {
     m_tab[i * m_cols + j] = val;
 }
-int Matrix::get(int i, int j) const {
+float Matrix::get(int i, int j) const {
     return m_tab[i * m_cols + j];
 }
 
-Matrix inverse() { //TODO SURTOUT APPLIQUER POUR LES 4X4 VU QUE C'EST SURTOUT CA QU'ON VA UTILISER
-    Matrix m_copy = Matrix(4,4);
+std::ostream& operator<<(std::ostream& os, const Matrix& m) {
+    for (int i = 0; i < m.getRows(); i++){
+        for (int j = 0; j < m.getCols(); j++) {
+            os << m.get(i, j) << " ";
+        }
+        os << std::endl;
+    }
+    //os << "test test test";
+    return os;
+}
 
-    return m_copy;
+
+Matrix Matrix::inverse4x4() { //A Appliquer uniquement sur les Matrix 4x4
+
+    if (getRows() != 4 && getCols() != 4) {
+        throw std::invalid_argument("Ce n'est pas une matrix 4x4");
+    }
+
+    float tmp[16], inv[16], det;
+    int i;
+
+    tmp[0] = m_tab[5] * m_tab[10] * m_tab[15] -
+        m_tab[5] * m_tab[11] * m_tab[14] -
+        m_tab[9] * m_tab[6] * m_tab[15] +
+        m_tab[9] * m_tab[7] * m_tab[14] +
+        m_tab[13] * m_tab[6] * m_tab[11] -
+        m_tab[13] * m_tab[7] * m_tab[10];
+
+    tmp[4] = -m_tab[4] * m_tab[10] * m_tab[15] +
+        m_tab[4] * m_tab[11] * m_tab[14] +
+        m_tab[8] * m_tab[6] * m_tab[15] -
+        m_tab[8] * m_tab[7] * m_tab[14] -
+        m_tab[12] * m_tab[6] * m_tab[11] +
+        m_tab[12] * m_tab[7] * m_tab[10];
+
+    tmp[8] = m_tab[4] * m_tab[9] * m_tab[15] -
+        m_tab[4] * m_tab[11] * m_tab[13] -
+        m_tab[8] * m_tab[5] * m_tab[15] +
+        m_tab[8] * m_tab[7] * m_tab[13] +
+        m_tab[12] * m_tab[5] * m_tab[11] -
+        m_tab[12] * m_tab[7] * m_tab[9];
+
+    tmp[12] = -m_tab[4] * m_tab[9] * m_tab[14] +
+        m_tab[4] * m_tab[10] * m_tab[13] +
+        m_tab[8] * m_tab[5] * m_tab[14] -
+        m_tab[8] * m_tab[6] * m_tab[13] -
+        m_tab[12] * m_tab[5] * m_tab[10] +
+        m_tab[12] * m_tab[6] * m_tab[9];
+
+    tmp[1] = -m_tab[1] * m_tab[10] * m_tab[15] +
+        m_tab[1] * m_tab[11] * m_tab[14] +
+        m_tab[9] * m_tab[2] * m_tab[15] -
+        m_tab[9] * m_tab[3] * m_tab[14] -
+        m_tab[13] * m_tab[2] * m_tab[11] +
+        m_tab[13] * m_tab[3] * m_tab[10];
+
+    tmp[5] = m_tab[0] * m_tab[10] * m_tab[15] -
+        m_tab[0] * m_tab[11] * m_tab[14] -
+        m_tab[8] * m_tab[2] * m_tab[15] +
+        m_tab[8] * m_tab[3] * m_tab[14] +
+        m_tab[12] * m_tab[2] * m_tab[11] -
+        m_tab[12] * m_tab[3] * m_tab[10];
+
+    tmp[9] = -m_tab[0] * m_tab[9] * m_tab[15] +
+        m_tab[0] * m_tab[11] * m_tab[13] +
+        m_tab[8] * m_tab[1] * m_tab[15] -
+        m_tab[8] * m_tab[3] * m_tab[13] -
+        m_tab[12] * m_tab[1] * m_tab[11] +
+        m_tab[12] * m_tab[3] * m_tab[9];
+
+    tmp[13] = m_tab[0] * m_tab[9] * m_tab[14] -
+        m_tab[0] * m_tab[10] * m_tab[13] -
+        m_tab[8] * m_tab[1] * m_tab[14] +
+        m_tab[8] * m_tab[2] * m_tab[13] +
+        m_tab[12] * m_tab[1] * m_tab[10] -
+        m_tab[12] * m_tab[2] * m_tab[9];
+
+    tmp[2] = m_tab[1] * m_tab[6] * m_tab[15] -
+        m_tab[1] * m_tab[7] * m_tab[14] -
+        m_tab[5] * m_tab[2] * m_tab[15] +
+        m_tab[5] * m_tab[3] * m_tab[14] +
+        m_tab[13] * m_tab[2] * m_tab[7] -
+        m_tab[13] * m_tab[3] * m_tab[6];
+
+    tmp[6] = -m_tab[0] * m_tab[6] * m_tab[15] +
+        m_tab[0] * m_tab[7] * m_tab[14] +
+        m_tab[4] * m_tab[2] * m_tab[15] -
+        m_tab[4] * m_tab[3] * m_tab[14] -
+        m_tab[12] * m_tab[2] * m_tab[7] +
+        m_tab[12] * m_tab[3] * m_tab[6];
+
+    tmp[10] = m_tab[0] * m_tab[5] * m_tab[15] -
+        m_tab[0] * m_tab[7] * m_tab[13] -
+        m_tab[4] * m_tab[1] * m_tab[15] +
+        m_tab[4] * m_tab[3] * m_tab[13] +
+        m_tab[12] * m_tab[1] * m_tab[7] -
+        m_tab[12] * m_tab[3] * m_tab[5];
+
+    tmp[14] = -m_tab[0] * m_tab[5] * m_tab[14] +
+        m_tab[0] * m_tab[6] * m_tab[13] +
+        m_tab[4] * m_tab[1] * m_tab[14] -
+        m_tab[4] * m_tab[2] * m_tab[13] -
+        m_tab[12] * m_tab[1] * m_tab[6] +
+        m_tab[12] * m_tab[2] * m_tab[5];
+
+    tmp[3] = -m_tab[1] * m_tab[6] * m_tab[11] +
+        m_tab[1] * m_tab[7] * m_tab[10] +
+        m_tab[5] * m_tab[2] * m_tab[11] -
+        m_tab[5] * m_tab[3] * m_tab[10] -
+        m_tab[9] * m_tab[2] * m_tab[7] +
+        m_tab[9] * m_tab[3] * m_tab[6];
+
+    tmp[7] = m_tab[0] * m_tab[6] * m_tab[11] -
+        m_tab[0] * m_tab[7] * m_tab[10] -
+        m_tab[4] * m_tab[2] * m_tab[11] +
+        m_tab[4] * m_tab[3] * m_tab[10] +
+        m_tab[8] * m_tab[2] * m_tab[7] -
+        m_tab[8] * m_tab[3] * m_tab[6];
+
+    tmp[11] = -m_tab[0] * m_tab[5] * m_tab[11] +
+        m_tab[0] * m_tab[7] * m_tab[9] +
+        m_tab[4] * m_tab[1] * m_tab[11] -
+        m_tab[4] * m_tab[3] * m_tab[9] -
+        m_tab[8] * m_tab[1] * m_tab[7] +
+        m_tab[8] * m_tab[3] * m_tab[5];
+
+    tmp[15] = m_tab[0] * m_tab[5] * m_tab[10] -
+        m_tab[0] * m_tab[6] * m_tab[9] -
+        m_tab[4] * m_tab[1] * m_tab[10] +
+        m_tab[4] * m_tab[2] * m_tab[9] +
+        m_tab[8] * m_tab[1] * m_tab[6] -
+        m_tab[8] * m_tab[2] * m_tab[5];
+
+    det = m_tab[0] * tmp[0] + m_tab[1] * tmp[4] + m_tab[2] * tmp[8] + m_tab[3] * tmp[12];
+
+    if (det == 0)
+      throw std::invalid_argument("Non Inversible");
+    ////TODO return error
+
+    det = 1.0 / det;
+
+    for (i = 0; i < 16; i++)
+        inv[i] = tmp[i] * det;
+
+    Matrix m_inverse = Matrix(4, 4);
+
+    for (i = 0; i < 16; i++) {
+        m_inverse.set(i, inv[i]);
+    }
+
+    return m_inverse;
 }
