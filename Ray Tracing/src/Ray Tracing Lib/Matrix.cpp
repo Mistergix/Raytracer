@@ -1,29 +1,59 @@
 #include "Matrix.h"
+Matrix::Matrix() {
+    m_rows = 4;
+    m_cols = 4;
+    m_tab = new float[4 * 4];
+    for (int i = 0; i < m_rows; ++i) {
+        for (int j = 0; j < m_cols; ++j) {
+            if (i == j)
+                m_tab[i * 4 + j] = 1;
+            else
+                m_tab[i * 4 + j] = 0;
+        }
+    }
+}
 Matrix::Matrix(int rows, int cols) {
-    m_cols = cols;
     m_rows = rows;
+    m_cols = cols;
     m_tab = new float[cols * rows];
-    for (int i = 0; i < m_rows * m_cols; i++) {
-        m_tab[i] = 1;
+    if (rows == rows == 4) {
+        for (int i = 0; i < m_rows; ++i) {
+            for (int j = 0; j < m_cols; ++j) {
+                if (i == j)
+                    m_tab[i * 4 + j] = 1;
+                else
+                    m_tab[i * 4 + j] = 0;
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < m_rows * m_cols; i++) {
+            m_tab[i] = 1;
+        }
     }
 }
 Matrix::Matrix(int rows, int cols, float val) {
-    m_cols = cols;
     m_rows = rows;
-    m_tab = new float[cols * rows];
+    m_cols = cols;
+    m_tab = new float[rows * cols];
     for (int i = 0; i < m_rows * m_cols; i++) {
         m_tab[i] = val;
     }
 }
 Matrix::Matrix(const Matrix& m) {
-    m_cols = m.getCols();
     m_rows = m.getRows();
-    m_tab = new float[m_cols * m_rows];
+    m_cols = m.getCols();
+    m_tab = new float[m_rows * m_cols];
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             m_tab[i * m_cols + j] = m.get(i, j);
         }
     }
+}
+Matrix::Matrix(float* t) {
+    m_rows = 4;
+    m_cols = 4;
+    m_tab = t;
 }
 Matrix::~Matrix() {
     delete[] m_tab;
@@ -33,7 +63,7 @@ Matrix& Matrix::operator=(const Matrix& m) {
         return *this;
     m_rows = m.getRows();
     m_cols = m.getRows();
-    m_tab = new float[m_cols * m_rows];
+    m_tab = new float[m_rows * m_cols];
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             m_tab[i * m_cols + j] = m.get(i, j);
@@ -47,6 +77,38 @@ float& Matrix::operator[](int val)const {
 }
 float& Matrix::operator()(int val1, int val2)const {
     return m_tab[val1 * m_cols + val2];
+}
+Matrix Matrix::operator * (const Matrix& v) const {
+    Matrix temp(v.getRows(), v.getCols());
+    int value;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (i == j) {
+                value = temp.get(i, j) - 1;
+                temp.set(i, j, value);
+            }
+            for (int k = 0; k < 4; k++) {
+                value = temp.get(i, j);
+                value += temp.get(i, k)*v.get(i, k);
+                temp.set(i, j, value);
+            }
+        }
+    }
+    return temp;
+}
+Matrix Matrix::operator * (const float& f) const {
+    float* arr = new float[4 * 4];
+    for (int i = 0; i < 4; i++) {
+        arr[i] = m_tab[i] * f;
+    }
+    return Matrix(arr);
+}
+Vector3 Matrix::operator * (const Vector3& v) const {
+    Vector3 temp;
+    temp.x = (*this)(0, 0) * v.x + (*this)(0, 1) * v.y + (*this)(0, 2) * v.z;
+    temp.y = (*this)(1, 0) * v.x + (*this)(1, 1) * v.y + (*this)(1, 2) * v.z;
+    temp.z = (*this)(2, 0) * v.x + (*this)(2, 1) * v.y + (*this)(2, 2) * v.z;
+    return temp;
 }
 int Matrix::getCols() const {
     return m_cols;

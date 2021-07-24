@@ -1,6 +1,7 @@
 #pragma once
 #include "Ray.h"
 #include "Material.h"
+#include "Entity.h"
 
 struct RayHit;
 class Scene;
@@ -11,8 +12,8 @@ struct Intersection {
 
     Intersection(bool intersect, float distance);
 };
-
-class Shape {
+//TODO Héritage Entity non fonctionnel
+class Shape{
     public:
         Shape();
         bool Intersect(const Scene& scene, RayHit& rayHit, bool useShadow);

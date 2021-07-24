@@ -1,7 +1,8 @@
 #pragma once
 #include "Ray.h"
 #include "Color.h"
-
+#include "Entity.h"
+//TODO Héritage Entity non fonctionnel
 class Light {
 	public:
 	Light(const Vector3& pos, const Color& id, const Color& is);
