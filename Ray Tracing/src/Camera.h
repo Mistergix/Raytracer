@@ -1,6 +1,7 @@
 #pragma once
 #include "../Maths.h"
-class Camera {
+#include "Ray Tracing Lib/Entity.h"
+class Camera : public Entity {
 public:
 	float* GetPerspectiveMatrix(float fovInDegrees, float near, float far, float aspectRatio);
 	float* GetOrthographicMatrix(float right, float left, float top, float bottom, float far, float near);
