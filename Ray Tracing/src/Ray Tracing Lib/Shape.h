@@ -25,4 +25,5 @@ class Shape{
         int index;
     protected :
         Material material;
+        Entity entity;
 };

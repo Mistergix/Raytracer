@@ -14,6 +14,7 @@ public:
     Matrix(int rows, int cols, float val);
     Matrix(const Matrix& m); //Constructeur par copie
     Matrix(float* t);
+    void Print() const;
     //Destructeur
     ~Matrix(); 
     //Opérateur d'affectation par copie

@@ -1,5 +1,6 @@
 #include "Entity.h"
-#include <cmath>	  			  				    	  
+#include <cmath>	  		
+#include <iostream>
 Entity::Entity() {
 	trans = Matrix();
 	transInv = Matrix();
@@ -17,11 +18,11 @@ void Entity::translate(Vector3 transV) {
 }
 
 void Entity::scale(float f) {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 4; j++) {
-			trans(i, j) = trans(i, j) * f;
-		}
-	}
+	Matrix m;
+	m(0, 0) = f;
+	m(1, 1) = f;
+	m(2, 2) = f;
+	trans = m * trans;
 	transInv = trans.inverse4x4();
 }
 
@@ -72,6 +73,9 @@ Vector3 Entity::localToGlobal(const Vector3& v) const {
 }
 
 Vector3 Entity::globalToLocal(const Vector3& v) const {
+	///std::cout << "TRANS INV in global to local" << std::endl;
+	///transInv.Print();
+	//std::cout << std::endl;
     return transInv * v;
 }
 
@@ -85,4 +89,21 @@ Ray Entity::globalToLocal(const Ray& r) const {
 	Vector3 origin = globalToLocal(r.origin);
 	Vector3 direction = globalToLocal(r.direction);
 	return Ray(origin, direction);
+}
+
+void Entity::Print() const
+{
+	std::cout << "TRANS" << std::endl;
+	trans.Print();
+	std::cout << std::endl;
+
+	std::cout << "TRANS INV" << std::endl;
+	transInv.Print();
+	std::cout << std::endl;
+
+	std::cout << "PRODUCT" << std::endl;
+	transInv.Print();
+	std::cout << std::endl;
+
+	std::cout << "-----------------------" << std::endl;
 }

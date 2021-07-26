@@ -1,10 +1,21 @@
 #include "vector3.h"
 
-Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
+Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 
-Vector3::Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
+Vector3::Vector3(float a, float b, float c) : x(a), y(b), z(c), w(1.0f) {}
 
-Vector3::Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z) {}
+Vector3::Vector3(float a, float b, float c, float t) : x(a), y(b), z(c), w(t)
+{
+}
+
+Vector3::Vector3(const Vector3& other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
+
+float Vector3::GetByDim(int dim) const
+{
+	if (dim == 0)return x;
+	if (dim == 1) return y;
+	return z;
+}
 
 void Vector3::Print()
 {
@@ -14,6 +25,11 @@ void Vector3::Print()
 Vector3 Vector3::Up() {return Vector3(0.0f, 1.0f, 0.0f);}
 Vector3 Vector3::Right() {return Vector3(1.0f, 0.0f, 0.0f);}
 Vector3 Vector3::Forward() {return Vector3(0.0f, 0.0f, 1.0f);}
+
+Vector3 Vector3::One()
+{
+	return Vector3(1.0f, 1.0f, 1.0f);
+}
 
 inline float Vector3::magnitudeSquared() {
     return square(x) + square(y) + square(z);

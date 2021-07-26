@@ -15,6 +15,7 @@
 #include "Ray Tracing Lib/Scene.h"
 #include "Ray Tracing Lib/Shapes/Sphere.h"
 #include "Ray Tracing Lib/Shapes/Plane.h"
+#include "Ray Tracing Lib/Shapes/Cube.h"
 #include "Ray Tracing Lib/RayTracerCamera.h"
 #include "Ray Tracing Lib/Ray.h"
 #include "Ray Tracing Lib/RayHit.h"
@@ -166,7 +167,7 @@ int main(void)
         scene.SetAmbiant(Color(jAmbiant.at(0), jAmbiant.at(1), jAmbiant.at(2)));
 
         //TODO utiliser des new et désallouer à la fin du programme
-
+        /*
         auto jLights = sceneJson.at("lights");
         for (int i = 0; i < jLights.size(); i++)
         {
@@ -179,7 +180,7 @@ int main(void)
                 Light light(lightPos, lightColor, lightSpec);
                 scene.AddLight(&light);
             }
-        }
+        }*/
         /*
         auto jShapes = sceneJson.at("shapes");
         for (int i = 0; i < jShapes.size(); i++)
@@ -197,6 +198,9 @@ int main(void)
             }
         }*/
 
+        Light light(Vector3(1,3,-1), Color(255, 255, 255), Color(255,255,255));
+        scene.AddLight(&light);
+
         float shininess = 10;
         Color matAmbiant = Color(25, 25, 25);
         Color matSpec = Color(255, 255, 255);
@@ -204,10 +208,12 @@ int main(void)
         Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
 
         Vector3 spherePos(0.0f, 1.0f, 0.0f);
-        Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), matSpec, matAmbiant, shininess));
+        //Sphere sphere(spherePos, 1.0f, Material(Color(0, 255, 0), matSpec, matAmbiant, shininess));
+        Cube cube(Vector3(1.0f, 2.0f, 0.0f), 0.5f, Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
 
         scene.AddShape(&floor);
-        scene.AddShape(&sphere);
+       // scene.AddShape(&sphere);
+        scene.AddShape(&cube);
 
         Background background;
 
@@ -242,7 +248,9 @@ int main(void)
                         {
                             float newY = (float)y + float(j) / (float)samples + 0.25f;
                             Vector3 screenCoord((2.0f * newX) / image.GetWidth() - 1.0f, (-2.0f * newY) / image.GetHeight() + 1.0f, 0.0f);
+                            Vector3 debugScreenCoord((2.0f * 150) / image.GetWidth() - 1.0f, (-2.0f * 150) / image.GetHeight() + 1.0f, 0.0f);
                             Ray ray = (&camera)->CreateRay(screenCoord);
+                            //Ray ray = (&camera)->CreateRay(debugScreenCoord);
                             RayHit rayHit(ray);
 
                             if ((&scene)->Intersect(rayHit, useShadow)) {
@@ -291,7 +299,7 @@ int main(void)
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            sphere.SetCenter(spherePos);
+            //sphere.SetCenter(spherePos);
             camera.SetPosition(camPos);
 
             /* Swap front and back buffers */

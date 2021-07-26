@@ -6,10 +6,14 @@ struct Vector3 {
     float x;
     float y;
     float z;
+    float w;
 
     Vector3();
     Vector3(float a, float b, float c);
+    Vector3(float a, float b, float c, float w);
     Vector3(const Vector3& other);
+
+    float GetByDim(int dim) const;
 
     void Print();
     
@@ -19,6 +23,8 @@ struct Vector3 {
     static Vector3 Up();
     static Vector3 Right();
     static Vector3 Forward();
+
+    static Vector3 One();
 
     Vector3 normalized();
 

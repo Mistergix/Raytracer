@@ -22,5 +22,7 @@ public:
     Ray localToGlobal(const Ray& r) const;
     Ray globalToLocal(const Ray& r) const;
 
+    void Print() const;
+
 };
 

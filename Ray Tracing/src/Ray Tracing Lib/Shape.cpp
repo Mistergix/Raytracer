@@ -6,6 +6,7 @@ Intersection::Intersection(bool intersect, float distance) : intersect(intersect
 
 Shape::Shape()
 {
+    entity = Entity();
 }
 
 bool Shape::Intersect(const Scene& scene, RayHit& rayHit, bool useShadows) {

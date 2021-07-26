@@ -160,6 +160,7 @@
     <ClCompile Include="src\Ray Tracing Lib\RayHit.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Scene.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shape.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Cube.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Plane.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Sphere.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Vector3.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\Ray Tracing Lib\RayHit.h" />
     <ClInclude Include="src\Ray Tracing Lib\Scene.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shape.h" />
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Cube.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Plane.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Sphere.h" />
     <ClInclude Include="src\Ray Tracing Lib\Vector3.h" />

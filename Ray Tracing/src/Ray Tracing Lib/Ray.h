@@ -13,7 +13,7 @@ struct Ray
 	Ray();
 	Ray(const Ray& other);
 	Ray(const Vector3& origin, const Vector3& direction, float distanceMax = RAY_DISTANCE_MAX);
-
+	Ray normalized();
 	Vector3 Compute(float distance) const;
 
 	Ray& operator = (const Ray& other);

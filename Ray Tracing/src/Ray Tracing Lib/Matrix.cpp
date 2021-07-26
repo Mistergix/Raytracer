@@ -55,8 +55,19 @@ Matrix::Matrix(float* t) {
     m_cols = 4;
     m_tab = t;
 }
+void Matrix::Print() const
+{
+    for (int i = 0; i < getRows(); ++i)
+    {
+        for (int j = 0; j < getCols(); ++j)
+        {
+            std::cout << get(i, j) << ' ';
+        }
+        std::cout << std::endl;
+    }
+}
 Matrix::~Matrix() {
-    delete[] m_tab;
+   // delete[] m_tab;
 }
 Matrix& Matrix::operator=(const Matrix& m) {
     if (this == &m)
@@ -80,18 +91,14 @@ float& Matrix::operator()(int val1, int val2)const {
 }
 Matrix Matrix::operator * (const Matrix& v) const {
     Matrix temp(v.getRows(), v.getCols());
-    int value;
+    float value;
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            if (i == j) {
-                value = temp.get(i, j) - 1;
-                temp.set(i, j, value);
-            }
+            value = 0;
             for (int k = 0; k < 4; k++) {
-                value = temp.get(i, j);
-                value += temp.get(i, k)*v.get(i, k);
-                temp.set(i, j, value);
+                value += get(i, k)* v.get(k, j);
             }
+            temp.set(i, j, value);
         }
     }
     return temp;
@@ -105,9 +112,10 @@ Matrix Matrix::operator * (const float& f) const {
 }
 Vector3 Matrix::operator * (const Vector3& v) const {
     Vector3 temp;
-    temp.x = (*this)(0, 0) * v.x + (*this)(0, 1) * v.y + (*this)(0, 2) * v.z;
-    temp.y = (*this)(1, 0) * v.x + (*this)(1, 1) * v.y + (*this)(1, 2) * v.z;
-    temp.z = (*this)(2, 0) * v.x + (*this)(2, 1) * v.y + (*this)(2, 2) * v.z;
+    temp.x = (*this)(0, 0) * v.x + (*this)(0, 1) * v.y + (*this)(0, 2) * v.z + (*this)(0,3) * v.w;
+    temp.y = (*this)(1, 0) * v.x + (*this)(1, 1) * v.y + (*this)(1, 2) * v.z + (*this)(1, 3) * v.w;
+    temp.z = (*this)(2, 0) * v.x + (*this)(2, 1) * v.y + (*this)(2, 2) * v.z + (*this)(2, 3) * v.w;
+    temp.w = (*this)(3, 0) * v.x + (*this)(3, 1) * v.y + (*this)(3, 2) * v.z + (*this)(3, 3) * v.w;
     return temp;
 }
 int Matrix::getCols() const {
