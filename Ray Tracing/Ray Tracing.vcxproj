@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Cone.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Entity.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Matrix.cpp" />
     <ClCompile Include="src\Application.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="src\Ray Tracing Lib\Scene.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shape.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Cube.cpp" />
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Cylinder.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Plane.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Sphere.cpp" />
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Square.cpp" />
@@ -182,6 +184,7 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Cone.h" />
     <ClInclude Include="src\Ray Tracing Lib\Entity.h" />
     <ClInclude Include="src\Ray Tracing Lib\Matrix.h" />
     <ClInclude Include="src\Application.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="src\Ray Tracing Lib\Scene.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shape.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Cube.h" />
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Cylinder.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Plane.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Sphere.h" />
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Square.h" />

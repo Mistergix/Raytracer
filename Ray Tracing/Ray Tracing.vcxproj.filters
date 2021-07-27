@@ -117,6 +117,12 @@
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Square.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Cylinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Cone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1083,6 +1089,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Square.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Cylinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Cone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Triangle.h">
