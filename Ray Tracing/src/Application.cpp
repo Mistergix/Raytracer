@@ -156,8 +156,6 @@ int main(int argc, char* argv[])
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
-        Texture texture;
-
         // UNBIND
         va.Unbind();
         shader.Unbind();
@@ -208,15 +206,17 @@ int main(int argc, char* argv[])
 
         //Shapes
         auto jShapes = sceneJson.at("shapes");
+        const int size = jShapes.size();
+        Texture* texture = new Texture [size];
         for (int i = 0; i < jShapes.size(); i++) {
             auto shape = jShapes.at(i);
             Color dColor = Color(shape.at("material").at("diffuse").at(0), shape.at("material").at("diffuse").at(1), shape.at("material").at("diffuse").at(2));
             Color sColor = Color(shape.at("material").at("specular").at(0), shape.at("material").at("specular").at(1), shape.at("material").at("specular").at(2));
             Color aColor = Color(shape.at("material").at("ambiant").at(0), shape.at("material").at("ambiant").at(1), shape.at("material").at("ambiant").at(2));
             float shininess = shape.at("material").at("shininess");
-            texture.load_image(shape.at("material").at("texture"));
+            texture[i].load_image(shape.at("material").at("texture"));
             bool useTexture = shape.at("material").at("useTexture");
-            Material mat = Material(dColor, sColor, aColor, shininess, &texture, useTexture);
+            Material mat = Material(dColor, sColor, aColor, shininess, &texture[i], useTexture);
             if (shape.at("type").get<std::string>().compare("plane") == 0) {
                 Vector3 pos(shape.at("position").at(0), shape.at("position").at(1), shape.at("position").at(2));
                 Vector3 normal(shape.at("normal").at(0), shape.at("normal").at(1), shape.at("normal").at(2));
@@ -271,7 +271,7 @@ int main(int argc, char* argv[])
             }
         }
 
-        /*Light light(Vector3(3,2,-3), Color(1.0f, 1.0f, 1.0f), Color(1.0f,1.0f,1.0f));
+        /*Light light(Vector3(3, 2, -3), Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 1.0f));
         scene.AddLight(&light);
 
         float shininess = 50;
