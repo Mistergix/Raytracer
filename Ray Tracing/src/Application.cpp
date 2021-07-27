@@ -17,6 +17,7 @@
 #include "Ray Tracing Lib/Shapes/Plane.h"
 #include "Ray Tracing Lib/Shapes/Cube.h"
 #include "Ray Tracing Lib/Shapes/Square.h"
+#include "Ray Tracing Lib/Shapes/Triangle.h"
 #include "Ray Tracing Lib/RayTracerCamera.h"
 #include "Ray Tracing Lib/Ray.h"
 #include "Ray Tracing Lib/RayHit.h"
@@ -211,11 +212,13 @@ int main(void)
         Sphere sphere(Vector3(0.0f, 0.0f, 0.0f), Vector3(-3.0f, 1.0f, 2.0f), 0.25f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
         Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 2.0f, 0.0f), 0.5f, Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
         Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 255, 0), matSpec, Color(255, 255, 255), shininess));
+        Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(-3.0f, 4.0f, 2.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 255, 0), matSpec, Color(255, 255, 255), shininess));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
         scene.AddShape(&cube);
         scene.AddShape(&square);
+        scene.AddShape(&tri);
 
         Background background;
 

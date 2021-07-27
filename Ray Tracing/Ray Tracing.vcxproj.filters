@@ -117,6 +117,9 @@
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Square.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\glm\detail\_features.hpp">
@@ -1080,6 +1083,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Square.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
