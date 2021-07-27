@@ -12,7 +12,7 @@ struct Intersection {
 
     Intersection(bool intersect, float distance);
 };
-//TODO Héritage Entity non fonctionnel
+
 class Shape{
     public:
         Shape();

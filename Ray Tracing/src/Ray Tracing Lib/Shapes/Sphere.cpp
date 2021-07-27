@@ -36,5 +36,8 @@ Intersection Sphere::DoesIntersect(const Ray& ray){
 
 Ray Sphere::GetNormal(const Vector3& p, const Vector3& o) const
 {
-    return Ray();
+    Vector3 lp = entity.globalToLocal(p);
+    Vector3 lo = entity.globalToLocal(o);
+    if ((lo - Vector3::Zero()).magnitude() < 1)return entity.localToGlobal(Ray(lp, -lp)).normalized();
+    return entity.localToGlobal(Ray(lp, lp)).normalized();
 }

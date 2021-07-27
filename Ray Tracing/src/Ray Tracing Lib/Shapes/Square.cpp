@@ -26,5 +26,12 @@ Intersection Square::DoesIntersect(const Ray& ray)
 
 Ray Square::GetNormal(const Vector3& p, const Vector3& o) const
 {
-	return Ray();
+	Vector3 lp = entity.globalToLocal(p);
+	Vector3 lo = entity.globalToLocal(o);
+	Vector3 v(0, 0, 0);
+	v.z = -1.0;
+
+	if (lo.x<1 && lo.x>-1 && lo.y<1 && lo.y>-1 && lo.z == 0)
+		return entity.localToGlobal(Ray(lp, -v)).normalized();
+	return entity.localToGlobal(Ray(lp, v)).normalized();
 }

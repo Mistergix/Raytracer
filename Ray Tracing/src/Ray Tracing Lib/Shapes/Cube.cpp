@@ -37,7 +37,18 @@ Intersection Cube::DoesIntersect(const Ray& ray)
 
 Ray Cube::GetNormal(const Vector3& p, const Vector3& o) const
 {
-	return Ray();
+	Vector3 lp = entity.globalToLocal(p);
+	Vector3 lo = entity.globalToLocal(o);
+	Vector3 v(0, 0, 0);
+	if (lp.x > 0.999)v.x = 1.0;
+	else if (lp.x < -0.999)v.x = -1.0;
+	else if (lp.y > 0.999)v.y = 1.0;
+	else if (lp.y < -0.999)v.y = -1.0;
+	else if (lp.z > 0.999)v.z = 1.0;
+	else if (lp.z < -0.999)v.z = -1.0;
+	if (lo.x<1 && lo.x>-1 && lo.y<1 && lo.y>-1 && lo.z<1 && lo.z>-1)
+		return entity.localToGlobal(Ray(lp, -v)).normalized();
+	return entity.localToGlobal(Ray(lp, v)).normalized();
 }
 
 float Cube::interSide(const Ray& r, int dim, float offset) const
