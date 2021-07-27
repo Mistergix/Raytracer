@@ -45,3 +45,8 @@ Ray Cylinder::GetNormal(const Vector3& p, const Vector3& o) const
 		return entity.localToGlobal(Ray(lp, Vector3(lp.x, 0, lp.z))).normalized();
 	return entity.localToGlobal(Ray(lp, Vector3(-lp.x, 0, -lp.z))).normalized();
 }
+
+Vector3 Cylinder::GetTextureCoordinates(const Vector3& p) const
+{
+	return Vector3(0, 0, 0);
+}
