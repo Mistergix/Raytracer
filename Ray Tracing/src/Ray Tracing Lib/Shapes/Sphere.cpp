@@ -41,3 +41,15 @@ Ray Sphere::GetNormal(const Vector3& p, const Vector3& o) const
     if ((lo - Vector3::Zero()).magnitude() < 1)return entity.localToGlobal(Ray(lp, -lp)).normalized();
     return entity.localToGlobal(Ray(lp, lp)).normalized();
 }
+
+Vector3 Sphere::GetTextureCoordinates(const Vector3& p) const
+{
+    Vector3 lp = entity.globalToLocal(p);
+    float rho = std::sqrt(dot(lp, lp));
+    float theta = std::atan2(lp.y, lp.x);
+    float sigma = std::acos(lp.z / rho);
+    float x = -theta / (2 * M_PI) + 0.5;
+    float y = sigma / M_PI;
+    //std::cerr<<x<<","<<y<<std::endl;   		 	  			  	 		 
+    return Vector3(x, y, 0);
+}

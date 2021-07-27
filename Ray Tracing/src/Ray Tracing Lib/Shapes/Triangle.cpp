@@ -58,3 +58,20 @@ Ray Triangle::GetNormal(const Vector3& p, const Vector3& o) const
         return entity.localToGlobal(Ray(lp, -v)).normalized();
     return entity.localToGlobal(Ray(lp, v)).normalized();
 }
+
+Vector3 Triangle::GetTextureCoordinates(const Vector3& f) const
+{
+    Vector3 p1 = entity.localToGlobal(vertex0);
+    Vector3 p2 = entity.localToGlobal(vertex1);
+    Vector3 p3 = entity.localToGlobal(vertex2);
+    Vector3 f1 = p1 - f;
+    Vector3 f2 = p2 - f;
+    Vector3 f3 = p3 - f;
+    // calculate the areas and factors (order of parameters doesn't matter):
+    float a = cross(p1 - p2, p1 - p3).magnitude(); // main triangle area a
+    float a1 = cross(f2, f3).magnitude() / a; // p1's triangle area / a
+    float a2 = cross(f3, f1).magnitude() / a; // p2's triangle area / a 
+    float a3 = cross(f1, f2).magnitude() / a; // p3's triangle area / a
+    // find the uv corresponding to point f (uv1/uv2/uv3 are associated to p1/p2/p3):
+    return p1 * a1 + p2 * a2 + p3 * a3;
+}

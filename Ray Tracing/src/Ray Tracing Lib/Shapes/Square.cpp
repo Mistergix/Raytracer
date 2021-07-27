@@ -35,3 +35,9 @@ Ray Square::GetNormal(const Vector3& p, const Vector3& o) const
 		return entity.localToGlobal(Ray(lp, -v)).normalized();
 	return entity.localToGlobal(Ray(lp, v)).normalized();
 }
+
+Vector3 Square::GetTextureCoordinates(const Vector3& p) const
+{
+	Vector3 lp = entity.globalToLocal(p);
+	return Vector3(lp.x / 2 + 0.5, lp.y / 2 + 0.5, 0.0);
+}

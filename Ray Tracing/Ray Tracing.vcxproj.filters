@@ -1513,5 +1513,14 @@
     <Image Include="src\res\textures\tricolor.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\Jhin_Render.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\TheTutureRed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\tricolor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

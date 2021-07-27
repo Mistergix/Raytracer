@@ -7,6 +7,7 @@ class Plane : public Shape {
         virtual ~Plane();
         virtual Intersection DoesIntersect(const Ray& ray);
         virtual Ray GetNormal(const Vector3& p, const Vector3& o)const;
+        virtual Vector3 GetTextureCoordinates(const Vector3& p)const;
     protected :
         Vector3 position;
         Vector3 normal;

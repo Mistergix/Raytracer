@@ -64,3 +64,12 @@ float Cube::interSide(const Ray& r, int dim, float offset) const
 	}
 	return t;
 }
+
+Vector3 Cube::GetTextureCoordinates(const Vector3& p) const
+{
+	Vector3 lp = entity.globalToLocal(p);
+	if (lp.x > 0.999 || lp.x < -0.999)return Vector3(lp.z / 2 + 0.5, lp.y / 2 + 0.5, 0);
+	if (lp.y > 0.999 || lp.y < -0.999)return Vector3(lp.x / 2 + 0.5, lp.z / 2 + 0.5, 0);
+	if (lp.z > 0.999 || lp.z < -0.999)return Vector3(lp.x / 2 + 0.5, lp.y / 2 + 0.5, 0);
+	return Vector3(0, 0, 0);
+}

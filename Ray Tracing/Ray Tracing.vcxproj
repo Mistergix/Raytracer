@@ -648,6 +648,9 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\Jhin_Render.png" />
+    <Image Include="res\textures\TheTutureRed.png" />
+    <Image Include="res\textures\tricolor.png" />
     <Image Include="src\res\textures\Jhin_Render.png" />
     <Image Include="src\res\textures\TheTutureRed.png" />
     <Image Include="src\res\textures\tricolor.png" />
