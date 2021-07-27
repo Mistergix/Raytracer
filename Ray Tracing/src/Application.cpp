@@ -25,8 +25,10 @@
 #include "Ray Tracing Lib/JsonReader.h"
 
 #include <typeinfo>
-
+#include <cstdlib>
 #include "Texture.h"
+
+#include "stb_image/stb_image_write.h"
 
 
 
@@ -41,8 +43,24 @@ void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
     }
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
+    std::cout << "You have entered " << argc
+        << " arguments:" << "\n";
+
+    for (int i = 0; i < argc; ++i)
+        std::cout << argv[i] << "\n";
+
+    std::string arg1 = argv[1];
+    std::string arg2 = argv[2];
+    bool realTime = arg1 == "true" ? true : false;
+    bool useShadow = arg2 == "true" ? true : false;
+    int renderWidth = atoi(argv[3]);
+    int renderHeight = atoi(argv[4]);
+    std::string sceneName = argv[5];
+    int samples = atoi(argv[6]);
+    std::string jpegName = argv[7];
+
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -156,7 +174,7 @@ int main(void)
         ImGui_ImplOpenGL3_Init(glsl_version);
 
         JsonReader reader;
-        json sceneJson = reader.GetJsonFile("res/scenes/scene1.json");
+        json sceneJson = reader.GetJsonFile("res/scenes/" + sceneName);
 
         auto jCamera = sceneJson.at("camera");
         auto jAmbiant = sceneJson.at("ambiant");
@@ -168,7 +186,6 @@ int main(void)
             (float)SCR_WIDTH / (float)SCR_HEIGHT);
 
         Scene scene;
-        bool useShadow = true;
         scene.shadowFactor = 0.5f;
         scene.SetAmbiant(Color(jAmbiant.at(0), jAmbiant.at(1), jAmbiant.at(2)));
 
@@ -226,29 +243,107 @@ int main(void)
 
         Background background;
 
-        int samples = 1;
-
         bool my_tool_active = true;
 
-        /* Loop until the user closes the window */
-        while (!glfwWindowShouldClose(window))
+        if (realTime) {
+            /* Loop until the user closes the window */
+            while (!glfwWindowShouldClose(window))
+            {
+                int width, height;
+                renderer.Resize(window, &width, &height);
+
+                renderer.Clear();
+
+                //CleanScreen(image, renderTexture);
+
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+
+                shader.Bind();
+
+                for (int x = 0; x < image.GetWidth(); x++) {
+                    for (int y = 0; y < image.GetHeight(); y++) {
+                        float r = 0.0f, g = 0.0f, b = 0.0f;
+                        Color color;
+                        for (int i = 0; i < samples; i++)
+                        {
+                            float newX = (float)x + float(i) / (float)samples + 0.25f;
+                            for (int j = 0; j < samples; j++)
+                            {
+                                float newY = (float)y + float(j) / (float)samples + 0.25f;
+                                Vector3 screenCoord((2.0f * newX) / image.GetWidth() - 1.0f, (-2.0f * newY) / image.GetHeight() + 1.0f, 0.0f);
+                                Vector3 debugScreenCoord((2.0f * 150) / image.GetWidth() - 1.0f, (-2.0f * 150) / image.GetHeight() + 1.0f, 0.0f);
+                                Ray ray = (&camera)->CreateRay(screenCoord);
+                                //Ray ray = (&camera)->CreateRay(debugScreenCoord);
+                                RayHit rayHit(ray);
+
+                                if ((&scene)->Intersect(rayHit, useShadow)) {
+                                    color = rayHit.color;
+                                }
+                                else
+                                {
+                                    color = background.Get(rayHit.Direction());
+                                }
+
+                                r += color.r;
+                                g += color.g;
+                                b += color.b;
+                            }
+                        }
+
+                        color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
+
+                        image.DrawPixel(x, y, color, renderTexture);
+                    }
+                }
+
+                GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, renderTexture));
+                shader.SetUniform1i("u_Texture", slot);
+                renderer.Draw(va, ib, shader);
+
+                //IMGUI HERE
+                ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
+                ImGui::SliderInt("AA Samples", &samples, 1, 2);
+                ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
+                ImGui::SliderFloat("Shadow Factor", &scene.shadowFactor, 0.0f, 1.0f);
+                if (ImGui::BeginMenuBar())
+                {
+                    if (ImGui::BeginMenu("Show"))
+                    {
+                        if (ImGui::MenuItem("Show Shadows", "")) {
+                            useShadow = !useShadow;
+                        }
+                        ImGui::EndMenu();
+                    }
+                    ImGui::EndMenuBar();
+                }
+                ImGui::End();
+
+                ImGui::Render();
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+                //sphere.SetCenter(spherePos);
+                camera.SetPosition(camPos);
+
+                /* Swap front and back buffers */
+                glfwSwapBuffers(window);
+
+                /* Poll for and process events */
+                glfwPollEvents();
+            }
+
+            ImGui_ImplOpenGL3_Shutdown();
+            ImGui_ImplGlfw_Shutdown();
+            ImGui::DestroyContext();
+        }
+        else
         {
-            int width, height;
-            renderer.Resize(window, &width, &height);
-
-            renderer.Clear();
-
-            //CleanScreen(image, renderTexture);
-
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            shader.Bind();
-
-            for (int x = 0; x < image.GetWidth(); x++) {
-                for (int y = 0; y < image.GetHeight(); y++) {
+            unsigned char* buffer = new unsigned char[renderWidth * renderHeight * 4];
+            for (int x = 0; x < renderWidth; x++) {
+                for (int y = 0; y < renderHeight; y++) {
                     float r = 0.0f, g = 0.0f, b = 0.0f;
+                    size_t index = 4 * ((renderHeight - y - 1) * renderWidth + x);
                     Color color;
                     for (int i = 0; i < samples; i++)
                     {
@@ -256,8 +351,8 @@ int main(void)
                         for (int j = 0; j < samples; j++)
                         {
                             float newY = (float)y + float(j) / (float)samples + 0.25f;
-                            Vector3 screenCoord((2.0f * newX) / image.GetWidth() - 1.0f, (-2.0f * newY) / image.GetHeight() + 1.0f, 0.0f);
-                            Vector3 debugScreenCoord((2.0f * 150) / image.GetWidth() - 1.0f, (-2.0f * 150) / image.GetHeight() + 1.0f, 0.0f);
+                            Vector3 screenCoord((2.0f * newX) / renderWidth - 1.0f, (-2.0f * newY) / renderHeight + 1.0f, 0.0f);
+                            Vector3 debugScreenCoord((2.0f * 150) / renderWidth - 1.0f, (-2.0f * 150) / renderHeight + 1.0f, 0.0f);
                             Ray ray = (&camera)->CreateRay(screenCoord);
                             //Ray ray = (&camera)->CreateRay(debugScreenCoord);
                             RayHit rayHit(ray);
@@ -278,48 +373,18 @@ int main(void)
 
                     color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
 
-                    image.DrawPixel(x, y, color, renderTexture);
+                    buffer[index + 0] = color.r;
+                    buffer[index + 1] = color.g;
+                    buffer[index + 2] = color.b;
+                    buffer[index + 3] = 255;
                 }
             }
+            int quality = 100;
 
-            GLCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, renderTexture));
-            shader.SetUniform1i("u_Texture", slot);
-            renderer.Draw(va, ib, shader);
-
-            //IMGUI HERE
-            ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
-            ImGui::SliderInt("AA Samples", &samples, 1, 2);
-            ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
-            ImGui::SliderFloat("Shadow Factor", &scene.shadowFactor, 0.0f, 1.0f);
-            if (ImGui::BeginMenuBar())
-            {
-                if (ImGui::BeginMenu("Show"))
-                {
-                    if (ImGui::MenuItem("Show Shadows", "")) {
-                        useShadow = !useShadow;
-                    }
-                    ImGui::EndMenu();
-                }
-                ImGui::EndMenuBar();
-            }
-            ImGui::End();
-
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-            //sphere.SetCenter(spherePos);
-            camera.SetPosition(camPos);
-
-            /* Swap front and back buffers */
-            glfwSwapBuffers(window);
-
-            /* Poll for and process events */
-            glfwPollEvents();
+            int success = stbi_write_jpg(("res/renders/" + jpegName).c_str(), renderWidth, renderHeight, 4, buffer, quality);
+            delete[] buffer;
         }
-
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        
 
         
     }

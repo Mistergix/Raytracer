@@ -73,7 +73,7 @@ Color RayHit::GetShadowFeeler(const Scene& scene)
 			auto inter = sh->DoesIntersect(toLight);
 			if (inter.intersect) {
 				if (shape->index == 1) {
-					std::cout << "IT IS CUBE" << std::endl;
+					//std::cout << "IT IS CUBE" << std::endl;
 				}
 				if (inter.distance >= distanceToLight || inter.distance < 0) {
 					continue;
