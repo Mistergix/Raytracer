@@ -18,6 +18,8 @@
 #include "Ray Tracing Lib/Shapes/Cube.h"
 #include "Ray Tracing Lib/Shapes/Square.h"
 #include "Ray Tracing Lib/Shapes/Triangle.h"
+#include "Ray Tracing Lib/Shapes/Cylinder.h"
+#include "Ray Tracing Lib/Shapes/Cone.h"
 #include "Ray Tracing Lib/RayTracerCamera.h"
 #include "Ray Tracing Lib/Ray.h"
 #include "Ray Tracing Lib/RayHit.h"
@@ -136,7 +138,7 @@ int main(void)
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
-        Texture texture("res/textures/tricolor.png");
+        Texture texture;
 
         // UNBIND
         va.Unbind();
@@ -172,57 +174,85 @@ int main(void)
         scene.shadowFactor = 0.5f;
         scene.SetAmbiant(Color(jAmbiant.at(0), jAmbiant.at(1), jAmbiant.at(2)));
 
-        //TODO utiliser des new et désallouer à la fin du programme
-        /*
+        //Lights
         auto jLights = sceneJson.at("lights");
         for (int i = 0; i < jLights.size(); i++)
         {
             auto light = jLights.at(i);
             if (light.at("type").get<std::string>().compare("point") == 0) {
-                Color lightSpec = Color(light.at("is").at(0), light.at("is").at(1), light.at("is").at(2));
-                Color lightColor = Color(light.at("id").at(0), light.at("id").at(1), light.at("id").at(2));
-
                 Vector3 lightPos(light.at("position").at(0), light.at("position").at(1), light.at("position").at(2));
+                Color lightColor = Color(light.at("id").at(0), light.at("id").at(1), light.at("id").at(2));
+                Color lightSpec = Color(light.at("is").at(0), light.at("is").at(1), light.at("is").at(2));
+
                 Light light(lightPos, lightColor, lightSpec);
                 scene.AddLight(&light);
             }
-        }*/
-        /*
+        }
+
+        //Shapes
         auto jShapes = sceneJson.at("shapes");
-        for (int i = 0; i < jShapes.size(); i++)
-        {
+        for (int i = 0; i < jShapes.size(); i++) {
             auto shape = jShapes.at(i);
             Color dColor = Color(shape.at("material").at("diffuse").at(0), shape.at("material").at("diffuse").at(1), shape.at("material").at("diffuse").at(2));
             Color sColor = Color(shape.at("material").at("specular").at(0), shape.at("material").at("specular").at(1), shape.at("material").at("specular").at(2));
             Color aColor = Color(shape.at("material").at("ambiant").at(0), shape.at("material").at("ambiant").at(1), shape.at("material").at("ambiant").at(2));
-            Material mat = Material(dColor, sColor, aColor, shape.at("material").at("shininess"));
+            float shininess = shape.at("material").at("shininess");
+            texture.load_image(shape.at("material").at("texture"));
+            bool useTexture = shape.at("material").at("useTexture");
+            Material mat = Material(dColor, sColor, aColor, shininess, &texture, useTexture);
             if (shape.at("type").get<std::string>().compare("plane") == 0) {
                 Vector3 pos(shape.at("position").at(0), shape.at("position").at(1), shape.at("position").at(2));
                 Vector3 normal(shape.at("normal").at(0), shape.at("normal").at(1), shape.at("normal").at(2));
-                Plane plane = new Plane(pos, normal, mat);
-                scene.AddShape(&plane);
+                Plane* plane = new Plane(pos, normal, mat);
+                scene.AddShape(plane);
             }
-        }*/
-
-        Light light(Vector3(3,1,-3), Color(1.0f, 1.0f, 1.0f), Color(1.0f,1.0f,1.0f));
-        scene.AddLight(&light);
-
-        float shininess = 50;
-        Color matAmbiant = Color(1.5f, 1.5f, 1.5f);
-        Color matSpec = Color(255, 255, 255);
-
-        Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-
-        Sphere sphere(Vector3(0.0f, 90.0f, 90.0f), Vector3(-3.0f, 1.0f, 3.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-        Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-        Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-        Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(0.0f, 3.0f, 3.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-
-        scene.AddShape(&floor);
-        scene.AddShape(&sphere);
-        scene.AddShape(&cube);
-        scene.AddShape(&square);
-        scene.AddShape(&tri);
+            else if (shape.at("type").get<std::string>().compare("sphere") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float radius = shape.at("radius");
+                Sphere* sphere = new Sphere(rot, center, radius, mat);
+                scene.AddShape(sphere);
+            }
+            else if (shape.at("type").get<std::string>().compare("cube") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float size = shape.at("size");
+                Cube* cube = new Cube(rot, center, size, mat);
+                scene.AddShape(cube);
+            }
+            else if (shape.at("type").get<std::string>().compare("square") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float size = shape.at("size");
+                Square* square = new Square(rot, center, size, mat);
+                scene.AddShape(square);
+            }
+            else if (shape.at("type").get<std::string>().compare("triangle") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float size = shape.at("size");
+                Vector3 vertex1(shape.at("vertex1").at(0), shape.at("vertex1").at(1), shape.at("vertex1").at(2));
+                Vector3 vertex2(shape.at("vertex2").at(0), shape.at("vertex2").at(1), shape.at("vertex2").at(2));
+                Vector3 vertex3(shape.at("vertex3").at(0), shape.at("vertex3").at(1), shape.at("vertex3").at(2));
+                Triangle* triangle = new Triangle(rot, center, size, vertex1, vertex2, vertex3, mat);
+                scene.AddShape(triangle);
+            }
+            else if (shape.at("type").get<std::string>().compare("cylinder") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float size = shape.at("size");
+                Cylinder* cylinder = new Cylinder(rot, center, size, mat);
+                scene.AddShape(cylinder);
+            }
+            else if (shape.at("type").get<std::string>().compare("cone") == 0) {
+                Vector3 rot(shape.at("rotation").at(0), shape.at("rotation").at(1), shape.at("rotation").at(2));
+                Vector3 center(shape.at("center").at(0), shape.at("center").at(1), shape.at("center").at(2));
+                float radius = shape.at("radius");
+                float height = shape.at("height");
+                Cone* cone = new Cone(rot, center, radius, height, mat);
+                scene.AddShape(cone);
+            }
+        }
 
         Background background;
 

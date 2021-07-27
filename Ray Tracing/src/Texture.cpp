@@ -17,6 +17,19 @@ Texture::Texture(const std::string& path)
 
 	//m_localBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, CHANNEL_REQUESTED);
 }
+Texture::Texture()
+	: m_RendererID(0), m_FIlePath("res/textures/tricolor.png"), m_localBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0)
+{
+	stbi_set_flip_vertically_on_load(1);
+	bool success = load_image(image, "res/textures/tricolor.png", m_Width, m_Height);
+	if (!success)
+	{
+		std::cout << "Error loading image\n";
+		return;
+	}
+
+	//m_localBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, CHANNEL_REQUESTED);
+}
 
 Texture::~Texture() 
 {
@@ -35,6 +48,16 @@ bool Texture::load_image(std::vector<unsigned char>& image, const std::string& f
 	}
 	stbi_image_free(data);
 	return (data != nullptr);
+}
+void Texture::load_image(const std::string& path)
+{
+	stbi_set_flip_vertically_on_load(1);
+	bool success = load_image(image, path, m_Width, m_Height);
+	if (!success)
+	{
+		std::cout << "Error loading image\n";
+		return;
+	}
 }
 
 Color Texture::Sample(const Vector3& uv) const
