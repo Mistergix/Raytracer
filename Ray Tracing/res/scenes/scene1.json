@@ -54,7 +54,9 @@
 		 "shininess" : 10,
 		 "ambiant" : [25, 25, 25],
 		 "specular" : [255, 255, 255],
-		 "diffuse" : [0, 255, 0]
+		 "diffuse" : [0, 255, 0],
+         "texture" : "res/textures/tricolor.png",
+         "useTexture" : "true"
 	  }
     }
   ],
