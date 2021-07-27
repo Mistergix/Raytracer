@@ -1,5 +1,7 @@
 #pragma once
 #include "Color.h"
+#include "../Texture.h"
+#include "Vector3.h"
 
 //ka : la composante ambiante, qui se multiplie par la lumière ambiante de la scène.
 //kd : la composante diffuse, qui se multiplie par la composante diffuse de chaque lumière.
@@ -8,9 +10,14 @@
 class Material {
 public:
 	Material();
-	Material(const Color& kd, const Color& ks, const Color& ka, float shininess);
+	Material(const Color& kd, const Color& ks, const Color& ka, float shininess, Texture* texture, bool useTexture);
 	Color kd;
 	Color ka;
 	Color ks;
 	float shininess;
+	Color GetDiffuseColor(const Vector3& uv) const;
+
+protected:
+	Texture* texture;
+	bool useTexture;
 };

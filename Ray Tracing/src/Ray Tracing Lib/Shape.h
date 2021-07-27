@@ -12,12 +12,13 @@ struct Intersection {
 
     Intersection(bool intersect, float distance);
 };
-//TODO Héritage Entity non fonctionnel
+
 class Shape{
     public:
         Shape();
         bool Intersect(const Scene& scene, RayHit& rayHit, bool useShadow);
         virtual Intersection DoesIntersect(const Ray& ray) = 0;
+        virtual Vector3 GetTextureCoordinates(const Vector3& p)const = 0;
         virtual ~Shape() {}
         void SetMaterial(const Material& mat);
         Material GetMaterial(const Vector3& p)const;

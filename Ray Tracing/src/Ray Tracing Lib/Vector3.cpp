@@ -31,6 +31,11 @@ Vector3 Vector3::One()
 	return Vector3(1.0f, 1.0f, 1.0f);
 }
 
+Vector3 Vector3::Zero()
+{
+	return Vector3();
+}
+
 inline float Vector3::magnitudeSquared() {
     return square(x) + square(y) + square(z);
 }

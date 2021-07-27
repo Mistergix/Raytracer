@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include <cmath>	  		
 #include <iostream>
-# define M_PI 3.14159265358979323846
+
 Entity::Entity() {
 	trans = Matrix();
 	transInv = Matrix();

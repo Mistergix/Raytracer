@@ -17,6 +17,7 @@
 #include "Ray Tracing Lib/Shapes/Plane.h"
 #include "Ray Tracing Lib/Shapes/Cube.h"
 #include "Ray Tracing Lib/Shapes/Square.h"
+#include "Ray Tracing Lib/Shapes/Triangle.h"
 #include "Ray Tracing Lib/RayTracerCamera.h"
 #include "Ray Tracing Lib/Ray.h"
 #include "Ray Tracing Lib/RayHit.h"
@@ -24,6 +25,8 @@
 #include "Ray Tracing Lib/JsonReader.h"
 
 #include <typeinfo>
+
+#include "Texture.h"
 
 
 
@@ -133,6 +136,8 @@ int main(void)
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
 
+        Texture texture("res/textures/tricolor.png");
+
         // UNBIND
         va.Unbind();
         shader.Unbind();
@@ -199,23 +204,25 @@ int main(void)
             }
         }*/
 
-        Light light(Vector3(1,3,-1), Color(255, 255, 255), Color(255,255,255));
+        Light light(Vector3(3,1,-3), Color(1.0f, 1.0f, 1.0f), Color(1.0f,1.0f,1.0f));
         scene.AddLight(&light);
 
-        float shininess = 10;
-        Color matAmbiant = Color(25, 25, 25);
+        float shininess = 50;
+        Color matAmbiant = Color(1.5f, 1.5f, 1.5f);
         Color matSpec = Color(255, 255, 255);
 
-        Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
+        Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
 
-        Sphere sphere(Vector3(0.0f, 0.0f, 0.0f), Vector3(-3.0f, 1.0f, 2.0f), 0.25f, Material(Color(0, 0, 255), matSpec, matAmbiant, shininess));
-        Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 2.0f, 0.0f), 0.5f, Material(Color(255, 0, 0), matSpec, Color(255, 255, 255), shininess));
-        Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 255, 0), matSpec, Color(255, 255, 255), shininess));
+        Sphere sphere(Vector3(0.0f, -45.0f, 0.0f), Vector3(-3.0f, 1.0f, 3.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(-3.0f, 4.0f, 2.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
         scene.AddShape(&cube);
         scene.AddShape(&square);
+        scene.AddShape(&tri);
 
         Background background;
 
@@ -313,6 +320,8 @@ int main(void)
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+
+        
     }
 
     glfwTerminate();

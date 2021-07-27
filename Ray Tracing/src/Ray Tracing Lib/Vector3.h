@@ -25,6 +25,7 @@ struct Vector3 {
     static Vector3 Forward();
 
     static Vector3 One();
+    static Vector3 Zero();
 
     Vector3 normalized();
 

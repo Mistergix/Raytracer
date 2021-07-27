@@ -37,13 +37,14 @@ Color RayHit::GetImpactColor(const Scene& scene)
 	Vector3 impact = HitPoint();
 	Material m = shape->GetMaterial(impact);
 	Ray normal = shape->GetNormal(impact, ray.origin);
-	Color c = m.ka * (scene.GetAmbiant()) * m.kd;
+	Color kd = m.GetDiffuseColor(shape->GetTextureCoordinates(impact));
+	Color c = m.ka * (scene.GetAmbiant());
 	for (int l = 0; l < scene.NbLights(); l++) {
 		const Light* light = scene.GetLight(l);
 		Vector3 lv = light->GetVectorToLight(impact);
 		float alpha = dot(lv, normal.direction);
 		if (alpha > 0.0f)
-			c += (light->id) * (m.kd) * alpha;
+			c += (light->id) * (kd) * alpha;
 
 		Vector3 rm = (2.0f * dot(lv, normal.direction) * normal.direction) - lv;
 

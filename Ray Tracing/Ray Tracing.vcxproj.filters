@@ -123,6 +123,9 @@
     <ClCompile Include="src\Ray Tracing Lib\Shapes\Cone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ray Tracing Lib\Shapes\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\glm\detail\_features.hpp">
@@ -1094,6 +1097,9 @@
     <ClInclude Include="src\Ray Tracing Lib\Shapes\Cone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Ray Tracing Lib\Shapes\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1517,6 +1523,15 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\res\textures\tricolor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\Jhin_Render.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\TheTutureRed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\tricolor.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

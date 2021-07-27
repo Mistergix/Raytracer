@@ -2,41 +2,70 @@
 
 #include "stb_image/stb_image.h"
 
+#define CHANNEL_REQUESTED 4
+
 Texture::Texture(const std::string& path) 
 	: m_RendererID(0), m_FIlePath(path), m_localBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0)
 {
 	stbi_set_flip_vertically_on_load(1);
-	m_localBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
+	bool success = load_image(image, path, m_Width, m_Height);
+	if (!success)
+	{
+		std::cout << "Error loading image\n";
+		return;
+	}
 
-	GLCall(glGenTextures(1, &m_RendererID));
-	Bind();
+	//m_localBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, CHANNEL_REQUESTED);
+}
 
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_localBuffer));
-	Unbind();
-
+Texture::~Texture() 
+{
 	if (m_localBuffer) {
 		stbi_image_free(m_localBuffer);
 	}
 }
 
-Texture::~Texture() 
+bool Texture::load_image(std::vector<unsigned char>& image, const std::string& filename, int& x, int& y)
 {
-	GLCall(glDeleteTextures(1, &m_RendererID));
+	int n;
+	unsigned char* data = stbi_load(filename.c_str(), &x, &y, &n, CHANNEL_REQUESTED);
+	if (data != nullptr)
+	{
+		image = std::vector<unsigned char>(data, data + x * y * CHANNEL_REQUESTED);
+	}
+	stbi_image_free(data);
+	return (data != nullptr);
 }
 
-void Texture::Bind(unsigned int slot) const
+Color Texture::Sample(const Vector3& uv) const
 {
-	ASSERT(slot >= 0 && slot < 32);
-	GLCall(glActiveTexture(GL_TEXTURE0 + slot))
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
-}
+	int i = uv.x * GetWidth();
+	int j = uv.y * GetHeight();
 
-void Texture::Unbind() const
-{
-	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+	if (uv.x >= 1.0f) {
+		return Color();
+	}
+
+	if (uv.x < 0.0f) {
+		return Color();
+	}
+
+	if (uv.y < 0.0f) {
+		return Color();
+	}
+
+	if (uv.y >= 1.0f) {
+		return Color();
+	}
+
+	const size_t RGBA = CHANNEL_REQUESTED;
+	size_t index = RGBA * (j * m_Width + i);
+
+	unsigned char r = image[index + 0];
+	unsigned char g = image[index + 1];
+	unsigned char b = image[index + 2];
+	unsigned char a = image[index + 3];
+
+	//std::cout << (int)r << " " << (int)g << " " << (int)b << " " << (int)a << std::endl;
+	return Color((int)r, (int)g, (int)b);
 }

@@ -19,3 +19,14 @@ Ray Plane::GetNormal(const Vector3& p, const Vector3& o) const
 {
     return Ray(p, normal);
 }
+
+Vector3 Plane::GetTextureCoordinates(const Vector3& p) const
+{
+    Vector3 lp = entity.globalToLocal(p);
+    float x = lp.x - (int)lp.x;
+    float y = lp.y - (int)lp.y;
+    if (x < 0)x += 1;
+    if (y < 0)y += 1;
+
+    return Vector3(x, y, 0);
+}
