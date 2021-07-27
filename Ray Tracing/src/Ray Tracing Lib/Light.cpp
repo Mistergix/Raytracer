@@ -22,10 +22,14 @@ Ray Light::GetRayFromLight(const Vector3& p) const
 
 Vector3 Light::GetVectorToLight(const Vector3& p) const
 {
-    return (position - p).normalized();
+    Vector3 dir = (position - p);
+    dir.w = 0.0f;
+    return dir.normalized();
 }
 
 Vector3 Light::GetVectorFromLight(const Vector3& p) const
 {
-    return (p - position).normalized();
+    Vector3 dir = (p - position);
+    dir.w = 0.0f;
+    return dir.normalized();
 }
