@@ -1,6 +1,6 @@
 #include "Sphere.h";
 
-Sphere::Sphere(const Vector3& rotation, const Vector3& center, float radius, const Material& mat) {
+Sphere::Sphere(const Vector3& rotation, const Vector3& center, float radius, const Material& mat) : center(center){
     entity.scale(radius);
     entity.rotate(rotation);
     entity.translate(center);
@@ -44,6 +44,29 @@ Ray Sphere::GetNormal(const Vector3& p, const Vector3& o) const
 
 Vector3 Sphere::GetTextureCoordinates(const Vector3& p) const
 {
+    Vector3 Sn = (p - center).normalized();
+    Vector3 Sp = entity.localToGlobal(Vector3::Up());
+    Vector3 Se = entity.localToGlobal(Vector3::Forward());
+
+    float phi = std::acos(-dot(Sn, Sp));
+    float v = phi / M_PI;
+    float u = 0;
+    if(v < 0.0001 || v > 0.999){
+        return Vector3(0, v, 0);
+    }
+
+    float theta = std::acos((dot(Se, Sn) / std::sin(phi))) / (2 * M_PI);
+
+    if (dot(cross(Sp, Se), Sn) > 0) {
+        u = theta;
+    }
+    else
+    {
+        u = 1 - theta;
+    }
+
+    return Vector3(u, v, 0);
+    /*
     Vector3 lp = entity.globalToLocal(p);
     float rho = std::sqrt(dot(lp, lp));
     float theta = std::atan2(lp.y, lp.x);
@@ -51,5 +74,5 @@ Vector3 Sphere::GetTextureCoordinates(const Vector3& p) const
     float x = -theta / (2 * M_PI) + 0.5;
     float y = sigma / M_PI;
     //std::cerr<<x<<","<<y<<std::endl;   		 	  			  	 		 
-    return Vector3(x, y, 0);
+    return Vector3(x, y, 0);*/
 }
