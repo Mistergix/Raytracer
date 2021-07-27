@@ -73,5 +73,5 @@ Vector3 Triangle::GetTextureCoordinates(const Vector3& f) const
     float a2 = cross(f3, f1).magnitude() / a; // p2's triangle area / a 
     float a3 = cross(f1, f2).magnitude() / a; // p3's triangle area / a
     // find the uv corresponding to point f (uv1/uv2/uv3 are associated to p1/p2/p3):
-    return p1 * a1 + p2 * a2 + p3 * a3;
+    return Vector3(0.0f, 1.0f, 0.0f) * a1 + Vector3(0.0f, 0.0f, 0.0f) * a2 + Vector3(1.0f, 1.0f, 0.0f) * a3;
 }

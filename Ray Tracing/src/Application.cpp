@@ -216,7 +216,7 @@ int main(void)
         Sphere sphere(Vector3(0.0f, 90.0f, 90.0f), Vector3(-3.0f, 1.0f, 3.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
         Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
         Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-        Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(-3.0f, 4.0f, 2.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(0.0f, 3.0f, 3.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
 
         scene.AddShape(&floor);
         scene.AddShape(&sphere);
