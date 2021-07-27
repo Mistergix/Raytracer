@@ -204,7 +204,7 @@ int main(void)
             }
         }*/
 
-        Light light(Vector3(3,1,-3), Color(1.0f, 1.0f, 1.0f), Color(1.0f,1.0f,1.0f));
+        Light light(Vector3(3,2,-3), Color(1.0f, 1.0f, 1.0f), Color(1.0f,1.0f,1.0f));
         scene.AddLight(&light);
 
         float shininess = 50;
@@ -213,8 +213,8 @@ int main(void)
 
         Plane floor(Vector3(0, 0, 0), Vector3(0, 1, 0), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
 
-        Sphere sphere(Vector3(0.0f, 90.0f, 90.0f), Vector3(-3.0f, 1.0f, 3.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
-        Cube cube(Vector3(0.0f, 45.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Sphere sphere(Vector3(0.0f, 0, 0), Vector3(-3, 1.0f, 3), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
+        Cube cube(Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 2.0f, 0.0f), 1.0f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
         Square square(Vector3(0.0f, 20.0f, 0.0f), Vector3(3.0f, 4.0f, 2.0f), 0.5f, Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
         Triangle tri(Vector3(0.0f, -20.0f, 0.0f), Vector3(0.0f, 3.0f, 3.0f), 1.0f, Vector3(0.0f, 1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Material(Color(0, 0, 0), matSpec, matAmbiant, shininess, &texture, true));
 

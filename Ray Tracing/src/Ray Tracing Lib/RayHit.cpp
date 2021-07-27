@@ -24,6 +24,7 @@ bool RayHit::Hit() const
 	return (shape != NULL);
 }
 
+
 Vector3 RayHit::Direction() const {
 	return ray.direction;
 }
@@ -62,12 +63,21 @@ Color RayHit::GetShadowFeeler(const Scene& scene)
 	for (int l = 0; l < scene.NbLights(); l++) {
 		const Light* light = scene.GetLight(l);
 		Vector3 lv = light->GetVectorToLight(impact);
-		Ray toLight(impact + lv * 0.0001f, lv);
+		Ray toLight(impact, lv);
+		auto distanceToLight = (light->position - impact).magnitude();
 
 		for (int s = 0; s < scene.NbShapes(); s++) {
 			Shape* sh = scene.GetShape(s);
 			if (shape->index == sh->index) { continue; }
-			if (sh->DoesIntersect(toLight).intersect) {
+			
+			auto inter = sh->DoesIntersect(toLight);
+			if (inter.intersect) {
+				if (shape->index == 1) {
+					std::cout << "IT IS CUBE" << std::endl;
+				}
+				if (inter.distance >= distanceToLight || inter.distance < 0) {
+					continue;
+				}
 				return color * scene.shadowFactor;
 			}
 
