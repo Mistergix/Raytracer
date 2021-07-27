@@ -3,7 +3,7 @@
 
 class Cube : public Shape {
 public:
-    Cube(const Vector3& center, float size, const Material& mat = Material());
+    Cube(const Vector3& rotation, const Vector3& center, float size, const Material& mat = Material());
     virtual ~Cube();
     virtual Intersection DoesIntersect(const Ray& ray);
     virtual Ray GetNormal(const Vector3& p, const Vector3& o)const;

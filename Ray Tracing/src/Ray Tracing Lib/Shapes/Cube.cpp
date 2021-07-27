@@ -1,9 +1,10 @@
 #include "Cube.h"
 
-Cube::Cube(const Vector3& center, float size, const Material& mat) : size(size)
+Cube::Cube(const Vector3& rotation, const Vector3& center, float size, const Material& mat) : size(size)
 {
-	entity.translate(center);
 	entity.scale(size);
+	entity.rotate(rotation);
+	entity.translate(center);
 	SetMaterial(mat);
 }
 

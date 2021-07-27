@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include <cmath>	  		
 #include <iostream>
+# define M_PI 3.14159265358979323846
 Entity::Entity() {
 	trans = Matrix();
 	transInv = Matrix();
@@ -29,10 +30,11 @@ void Entity::scale(float f) {
 void Entity::rotateX(float deg) {
 
 	Matrix m;
-	m(1, 1) = std::cos(deg);
-	m(1, 2) = -std::sin(deg);
-	m(2, 1) = std::sin(deg);
-	m(2, 2) = std::cos(deg);
+	float rad = deg * M_PI / 180.0f;
+	m(1, 1) = std::cos(rad);
+	m(1, 2) = -std::sin(rad);
+	m(2, 1) = std::sin(rad);
+	m(2, 2) = std::cos(rad);
 
 	trans = m * trans;
 
@@ -41,10 +43,11 @@ void Entity::rotateX(float deg) {
 void Entity::rotateY(float deg) {
 
 	Matrix m;
-	m(0, 0) = std::cos(deg);
-	m(0, 2) = std::sin(deg);
-	m(2, 0) = -std::sin(deg);
-	m(2, 2) = std::cos(deg);
+	float rad = deg * M_PI / 180.0f;
+	m(0, 0) = std::cos(rad);
+	m(0, 2) = std::sin(rad);
+	m(2, 0) = -std::sin(rad);
+	m(2, 2) = std::cos(rad);
 
 	trans = m * trans;
 
@@ -52,10 +55,11 @@ void Entity::rotateY(float deg) {
 }
 void Entity::rotateZ(float deg) {
 	Matrix m;
-	m(0, 0) = std::cos(deg);
-	m(0, 1) = -std::sin(deg);
-	m(1, 0) = std::sin(deg);
-	m(1, 1) = std::cos(deg);
+	float rad = deg * M_PI / 180.0f;
+	m(0, 0) = std::cos(rad);
+	m(0, 1) = -std::sin(rad);
+	m(1, 0) = std::sin(rad);
+	m(1, 1) = std::cos(rad);
 
 	trans = m * trans;
 
