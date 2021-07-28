@@ -60,8 +60,8 @@
             "radius": 1.0,
             "material": {
                 "type": "phong",
-                "diffuse": [ 231, 161, 176 ],
-                "specular": [ 20, 20, 20 ],
+                "diffuse": [ 255, 0, 0 ],
+                "specular": [ 10, 10, 10 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",

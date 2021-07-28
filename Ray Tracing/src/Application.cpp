@@ -32,6 +32,16 @@
 
 #include "stb_image/stb_image_write.h"
 
+Vector3 Max(Vector3& a, Vector3& b) {
+    Vector3 res(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+    return res;
+}
+
+Vector3 fresnelSchlick(float cosTheta, Vector3 F0)
+{
+    return F0 + (Vector3::One() - F0) * pow(std::clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
 Vector3 Reflect(Vector3 direction, Vector3 normal) {
     return direction - (2.0f * dot(direction, normal) * normal);
 }
@@ -39,12 +49,14 @@ Vector3 Reflect(Vector3 direction, Vector3 normal) {
 Color Shade(Texture& skybox, bool trace, RayHit& rayHit, Ray& ray) {
     Color color;
     if (trace) {
+        
         Color specular = rayHit.shape->GetMaterial(rayHit.HitPoint()).ks * (1.0f / 255.0f);
         Vector3 spec(specular.r, specular.g, specular.b);
+        Vector3  F = fresnelSchlick(std::max(dot(rayHit.Normal().direction.normalized(), -ray.direction), 0.0f), spec);
 
         ray.origin = rayHit.HitPoint() + rayHit.Normal().direction.normalized() * 0.001f;
         ray.direction = Reflect(ray.direction, rayHit.Normal().direction.normalized());
-        ray.energy = ray.energy * spec;
+        ray.energy = ray.energy * F;
 
         color = rayHit.color;
     }
@@ -252,9 +264,8 @@ int main(int argc, char* argv[])
 
         Vector3 camPos(jCamera.at("position").at(0), jCamera.at("position").at(1), jCamera.at("position").at(2));
         Vector3 camLookAt(jCamera.at("lookAt").at(0), jCamera.at("lookAt").at(1), jCamera.at("lookAt").at(2));
-        PerspectiveCamera camera(camPos,
-            camLookAt, Vector3::Up(), jCamera.at("fov") * PI / 180.0f,
-            (float)SCR_WIDTH / (float)SCR_HEIGHT);
+        PerspectiveCamera camera(camPos, camLookAt, Vector3::Up(), jCamera.at("fov") * PI / 180.0f,
+           ( realTime ? (float)SCR_WIDTH : (float)renderWidth) / (realTime ? (float)SCR_HEIGHT : (float)renderHeight));
 
         Scene scene;
         scene.shadowFactor = 0.5f;
