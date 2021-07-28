@@ -1540,5 +1540,8 @@
     <Image Include="res\textures\tricolor.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\Skybox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

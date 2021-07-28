@@ -81,6 +81,11 @@ Color Texture::Sample(const Vector3& uv) const
 		return Color();
 	}
 
+	return Sample(i, j);
+}
+
+Color Texture::Sample(int i, int j) const
+{
 	const size_t RGBA = CHANNEL_REQUESTED;
 	size_t index = RGBA * (j * m_Width + i);
 

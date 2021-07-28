@@ -1,0 +1,193 @@
+﻿{
+    "skybox" : "res/textures/Skybox.png",
+  "ambiant" : [1, 1, 1],
+  "lights": [
+    {
+      "type": "point",
+      "position": [
+        3,
+        1,
+        -3
+      ],
+      "id": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "is": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+    "shapes": [
+        {
+            "type": "sphere",
+            "rotation": [
+                0.0,
+                90.0,
+                90.0
+            ],
+            "center": [
+                -3.0,
+                1.0,
+                3.0
+            ],
+            "radius": 1.0,
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/tricolor.png",
+                "useTexture": true
+            }
+        },
+        {
+            "type": "cube",
+            "rotation": [
+                0.0,
+                45.0,
+                0.0
+            ],
+            "center": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "size": 1.0,
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/tricolor.png",
+                "useTexture": true
+            }
+        },
+        {
+            "type": "square",
+            "rotation": [
+                0.0,
+                20.0,
+                0.0
+            ],
+            "center": [
+                3.0,
+                4.0,
+                2.0
+            ],
+            "size": 0.5,
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/Jhin_Render.png",
+                "useTexture": true
+            }
+        },
+        {
+            "type": "triangle",
+            "rotation": [
+                0.0,
+                -20.0,
+                0.0
+            ],
+            "center": [
+                0.0,
+                3.0,
+                3.0
+            ],
+            "size": 1.0,
+            "vertex1": [
+                0.0,
+                1.0,
+                0.0
+            ],
+            "vertex2": [
+                -1.0,
+                0.0,
+                0.0
+            ],
+            "vertex3": [
+                1.0,
+                0.0,
+                0.0
+            ],
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/Jhin_Render.png",
+                "useTexture": true
+            }
+        },
+        {
+            "type": "cylinder",
+            "rotation": [
+                0.0,
+                90.0,
+                90.0
+            ],
+            "center": [
+                3.0,
+                1.0,
+                5.0
+            ],
+            "size": 1.0,
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/tricolor.png",
+                "useTexture": true
+            }
+        },
+        {
+            "type": "cone",
+            "rotation": [
+                0.0,
+                45.0,
+                0.0
+            ],
+            "center": [
+                5.0,
+                0.0,
+                4.0
+            ],
+            "radius": 1.0,
+            "height": 5.0,
+            "material": {
+                "type": "phong",
+                "diffuse": [ 0, 0, 0 ],
+                "specular": [ 255, 255, 255 ],
+                "ambiant": [ 1.5, 1.5, 1.5 ],
+                "shininess": 50,
+                "texture": "res/textures/tricolor.png",
+                "useTexture": true
+            }
+        }
+    ],
+  "camera": {
+    "fov": 50,
+    "lookAt": [
+      0,
+      0,
+      0
+    ],
+    "position": [
+      0,
+      5,
+      -5
+    ]
+  }
+}

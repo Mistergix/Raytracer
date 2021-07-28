@@ -32,6 +32,73 @@
 
 #include "stb_image/stb_image_write.h"
 
+Vector3 Reflect(Vector3 direction, Vector3 normal) {
+    return direction - (2.0f * dot(direction, normal) * normal);
+}
+
+Color Shade(Texture& skybox, bool trace, RayHit& rayHit, Ray& ray) {
+    Color color;
+    if (trace) {
+        Vector3 specular(0.6f, 0.6f, 0.6f);
+
+        ray.origin = rayHit.HitPoint() + rayHit.Normal().direction.normalized() * 0.001f;
+        ray.direction = Reflect(ray.direction, rayHit.Normal().direction.normalized());
+        ray.energy = ray.energy * specular;
+
+        color = rayHit.color;
+    }
+    else
+    {
+        ray.energy = Vector3::Zero();
+        float theta = atan2(ray.direction.x, ray.direction.z);
+        float r = 1;
+        float phi = acos(ray.direction.y / r);
+        float u = theta / (2 * PI);
+        u = 0.5f - u;
+        float v = 1 - phi / PI;
+        color = skybox.Sample(Vector3(u, v, 0.0f));
+    }
+
+    return color;
+}
+
+
+Color GetColor(int x, int y, int samples, int w, int h, int reflexionMax, PerspectiveCamera& camera, Texture& skybox, Scene& scene, bool useShadow) {
+    float r = 0.0f, g = 0.0f, b = 0.0f;
+    Color color;
+    for (int i = 0; i < samples; i++)
+    {
+        float newX = (float)x + float(i) / (float)samples + 0.25f;
+        for (int j = 0; j < samples; j++)
+        {
+            float newY = (float)y + float(j) / (float)samples + 0.25f;
+            Vector3 screenCoord((2.0f * newX) / w - 1.0f, (-2.0f * newY) / h + 1.0f, 0.0f);
+            Vector3 debugScreenCoord((2.0f * 150) / w - 1.0f, (-2.0f * 150) / h + 1.0f, 0.0f);
+            Ray ray = (&camera)->CreateRay(screenCoord);
+            //Ray ray = (&camera)->CreateRay(debugScreenCoord);
+            RayHit rayHit(ray);
+
+            color = Color();
+
+            for (size_t i = 0; i < reflexionMax; i++)
+            {
+                // TRACE
+                bool trace = (&scene)->Intersect(rayHit, useShadow);
+                Vector3 energy = ray.energy;
+                color += energy * Shade(skybox, trace, rayHit, ray);
+                rayHit.ray = ray;
+
+                if (ray.energy.magnitude() <= 0.01f) { break; }
+            }
+            r += color.r;
+            g += color.g;
+            b += color.b;
+        }
+    }
+
+    color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
+    return color;
+}
 
 
 void CleanScreen(Image& image, GLubyte  renderTexture[SCR_WIDTH][SCR_HEIGHT][4])
@@ -62,6 +129,7 @@ int main(int argc, char* argv[])
     std::string sceneName = argv[5];
     int samples = atoi(argv[6]);
     std::string jpegName = argv[7];
+    int reflexionMax = atoi(argv[8]);
 
     GLFWwindow* window;
 
@@ -175,6 +243,8 @@ int main(int argc, char* argv[])
 
         JsonReader reader;
         json sceneJson = reader.GetJsonFile("res/scenes/" + sceneName);
+
+        Texture skybox(sceneJson.at("skybox"));
 
         auto jCamera = sceneJson.at("camera");
         auto jAmbiant = sceneJson.at("ambiant");
@@ -291,7 +361,7 @@ int main(int argc, char* argv[])
         scene.AddShape(&square);
         scene.AddShape(&tri);*/
 
-        Background background;
+        //Background background;
 
         bool my_tool_active = true;
 
@@ -312,38 +382,12 @@ int main(int argc, char* argv[])
 
                 shader.Bind();
 
-                for (int x = 0; x < image.GetWidth(); x++) {
-                    for (int y = 0; y < image.GetHeight(); y++) {
-                        float r = 0.0f, g = 0.0f, b = 0.0f;
-                        Color color;
-                        for (int i = 0; i < samples; i++)
-                        {
-                            float newX = (float)x + float(i) / (float)samples + 0.25f;
-                            for (int j = 0; j < samples; j++)
-                            {
-                                float newY = (float)y + float(j) / (float)samples + 0.25f;
-                                Vector3 screenCoord((2.0f * newX) / image.GetWidth() - 1.0f, (-2.0f * newY) / image.GetHeight() + 1.0f, 0.0f);
-                                Vector3 debugScreenCoord((2.0f * 150) / image.GetWidth() - 1.0f, (-2.0f * 150) / image.GetHeight() + 1.0f, 0.0f);
-                                Ray ray = (&camera)->CreateRay(screenCoord);
-                                //Ray ray = (&camera)->CreateRay(debugScreenCoord);
-                                RayHit rayHit(ray);
+                int w = image.GetWidth();
+                int h = image.GetHeight();
 
-                                if ((&scene)->Intersect(rayHit, useShadow)) {
-                                    color = rayHit.color;
-                                }
-                                else
-                                {
-                                    color = background.Get(rayHit.Direction());
-                                }
-
-                                r += color.r;
-                                g += color.g;
-                                b += color.b;
-                            }
-                        }
-
-                        color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
-
+                for (int x = 0; x < w; x++) {
+                    for (int y = 0; y < h; y++) {
+                        Color color = GetColor(x,y, samples, w, h, reflexionMax, camera, skybox, scene, useShadow);
                         image.DrawPixel(x, y, color, renderTexture);
                     }
                 }
@@ -355,6 +399,7 @@ int main(int argc, char* argv[])
                 //IMGUI HERE
                 ImGui::Begin("Ray Tracing", &my_tool_active, ImGuiWindowFlags_MenuBar);
                 ImGui::SliderInt("AA Samples", &samples, 1, 2);
+                ImGui::SliderInt("Reflection", &reflexionMax, 1, 8);
                 ImGui::SliderFloat3("Cam Pos", &camPos.x, -5.0f, 5.0f);
                 ImGui::SliderFloat("Shadow Factor", &scene.shadowFactor, 0.0f, 1.0f);
                 if (ImGui::BeginMenuBar())
@@ -390,45 +435,21 @@ int main(int argc, char* argv[])
         else
         {
             unsigned char* buffer = new unsigned char[renderWidth * renderHeight * 4];
-            for (int x = 0; x < renderWidth; x++) {
-                for (int y = 0; y < renderHeight; y++) {
-                    float r = 0.0f, g = 0.0f, b = 0.0f;
+
+            int w = renderWidth;
+            int h = renderHeight;
+
+            for (int x = 0; x < w; x++) {
+                for (int y = 0; y < h; y++) {
+                    Color color = GetColor(x, y, samples, w, h, reflexionMax, camera, skybox, scene, useShadow);
                     size_t index = 4 * ((renderHeight - y - 1) * renderWidth + x);
-                    Color color;
-                    for (int i = 0; i < samples; i++)
-                    {
-                        float newX = (float)x + float(i) / (float)samples + 0.25f;
-                        for (int j = 0; j < samples; j++)
-                        {
-                            float newY = (float)y + float(j) / (float)samples + 0.25f;
-                            Vector3 screenCoord((2.0f * newX) / renderWidth - 1.0f, (-2.0f * newY) / renderHeight + 1.0f, 0.0f);
-                            Vector3 debugScreenCoord((2.0f * 150) / renderWidth - 1.0f, (-2.0f * 150) / renderHeight + 1.0f, 0.0f);
-                            Ray ray = (&camera)->CreateRay(screenCoord);
-                            //Ray ray = (&camera)->CreateRay(debugScreenCoord);
-                            RayHit rayHit(ray);
-
-                            if ((&scene)->Intersect(rayHit, useShadow)) {
-                                color = rayHit.color;
-                            }
-                            else
-                            {
-                                color = background.Get(rayHit.Direction());
-                            }
-
-                            r += color.r;
-                            g += color.g;
-                            b += color.b;
-                        }
-                    }
-
-                    color = Color(r / (float)(samples * samples), g / (float)(samples * samples), b / (float)(samples * samples));
-
                     buffer[index + 0] = color.r;
                     buffer[index + 1] = color.g;
                     buffer[index + 2] = color.b;
                     buffer[index + 3] = 255;
                 }
             }
+
             int quality = 100;
 
             int success = stbi_write_jpg(("res/renders/" + jpegName).c_str(), renderWidth, renderHeight, 4, buffer, quality);

@@ -24,6 +24,7 @@ struct RayHit
 	Vector3 Origin() const;
 	Color GetImpactColor(const Scene& scene);
 	Color GetShadowFeeler(const Scene& scene);
+	Ray Normal() const;
 
 	RayHit& operator = (const RayHit& other);
 };

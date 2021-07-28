@@ -657,6 +657,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\Jhin_Render.png" />
+    <Image Include="res\textures\Skybox.png" />
     <Image Include="res\textures\TheTutureRed.png" />
     <Image Include="res\textures\tricolor.png" />
     <Image Include="src\res\textures\Jhin_Render.png" />

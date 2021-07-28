@@ -37,7 +37,7 @@ Color RayHit::GetImpactColor(const Scene& scene)
 {
 	Vector3 impact = HitPoint();
 	Material m = shape->GetMaterial(impact);
-	Ray normal = shape->GetNormal(impact, ray.origin);
+	Ray normal = Normal();
 	Color kd = m.GetDiffuseColor(shape->GetTextureCoordinates(impact));
 	Color c = m.ka * (scene.GetAmbiant());
 	for (int l = 0; l < scene.NbLights(); l++) {
@@ -85,5 +85,10 @@ Color RayHit::GetShadowFeeler(const Scene& scene)
 	}
 
 	return color;
+}
+
+Ray RayHit::Normal() const
+{
+	return shape->GetNormal(HitPoint(), ray.origin);
 }
 

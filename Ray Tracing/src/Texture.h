@@ -20,4 +20,5 @@ public:
 	inline int GetWidth() const { return m_Width; }
 	inline int GetHeight() const { return m_Height; }
 	Color Sample(const Vector3& uv) const;
+	Color Sample(int i, int j) const;
 };

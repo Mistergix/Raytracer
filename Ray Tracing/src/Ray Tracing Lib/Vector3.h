@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "../Maths.h"
+#include "Color.h"
 
 struct Vector3 {
     float x;
@@ -44,6 +45,10 @@ Vector3 cross(Vector3 v1, Vector3 v2);
 inline float square(float n)
 {
 	return n * n;
+}
+
+inline Color operator * (const Vector3& a, const Color& col) {
+    return Color(a.x * col.r, a.y * col.g, a.z * col.b);
 }
 
 inline Vector3 operator + (const Vector3& a, const Vector3& b){
