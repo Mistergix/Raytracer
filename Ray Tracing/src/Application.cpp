@@ -39,11 +39,12 @@ Vector3 Reflect(Vector3 direction, Vector3 normal) {
 Color Shade(Texture& skybox, bool trace, RayHit& rayHit, Ray& ray) {
     Color color;
     if (trace) {
-        Vector3 specular(0.6f, 0.6f, 0.6f);
+        Color specular = rayHit.shape->GetMaterial(rayHit.HitPoint()).ks * (1.0f / 255.0f);
+        Vector3 spec(specular.r, specular.g, specular.b);
 
         ray.origin = rayHit.HitPoint() + rayHit.Normal().direction.normalized() * 0.001f;
         ray.direction = Reflect(ray.direction, rayHit.Normal().direction.normalized());
-        ray.energy = ray.energy * specular;
+        ray.energy = ray.energy * spec;
 
         color = rayHit.color;
     }

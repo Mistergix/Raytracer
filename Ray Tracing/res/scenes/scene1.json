@@ -26,7 +26,7 @@
             "type": "plane",
             "position": [
                 0,
-                0,
+                1,
                 0
             ],
             "normal": [
@@ -37,7 +37,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",
@@ -60,7 +60,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",
@@ -83,7 +83,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",
@@ -106,7 +106,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/Jhin_Render.png",
@@ -144,7 +144,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/Jhin_Render.png",
@@ -167,7 +167,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",
@@ -191,7 +191,7 @@
             "material": {
                 "type": "phong",
                 "diffuse": [ 0, 0, 0 ],
-                "specular": [ 255, 255, 255 ],
+                "specular": [ 153, 153, 153 ],
                 "ambiant": [ 1.5, 1.5, 1.5 ],
                 "shininess": 50,
                 "texture": "res/textures/tricolor.png",
@@ -203,12 +203,12 @@
     "fov": 50,
     "lookAt": [
       0,
-      0,
+      3,
       0
     ],
     "position": [
       0,
-      5,
+      1,
       -5
     ]
   }
